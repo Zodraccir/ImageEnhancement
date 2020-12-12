@@ -25,6 +25,9 @@ if __name__ == '__main__':
     figure_file = 'plots/' + fname + '.png'
 
     n_steps = 0
+    
+    print(agent.q_eval.device)
+    
     scores, eps_history, steps_array = [], [], []
 
     for i in range(n_games):
