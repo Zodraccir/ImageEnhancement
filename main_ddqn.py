@@ -34,7 +34,7 @@ if __name__ == '__main__':
         done = False
         print(".......... EPISODE "+str(i)+" --------------")
         observation = env.reset()
-        state_= observation.clone()
+        state_= observation.clone().to(agent.q_eval.device)
         score = 0
         while not done:
 
