@@ -47,7 +47,7 @@ if __name__ == '__main__':
             score += reward
 
             if learn_:
-                agent.store_transition(state_, action,
+                agent.store_transition(state_.cpu(), action,
                                      reward, observation_, int(done))
                 agent.learn()
             state_ = observation_
