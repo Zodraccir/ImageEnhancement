@@ -9,11 +9,11 @@ if __name__ == '__main__':
     best_score = -np.inf
     load_checkpoint = True
     learn_= True
-    n_games = 4000
+    n_games = 100000
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=1000, eps_min=0.15,
-                     batch_size=64, replace=500, eps_dec=5e-5,
+                     batch_size=64, replace=500, eps_dec=5e-7,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
@@ -32,18 +32,18 @@ if __name__ == '__main__':
 
     for i in range(n_games):
         done = False
-        print(".......... EPISODE "+str(i)+" --------------")
+        #print(".......... EPISODE "+str(i)+" --------------")
         observation = env.reset()
         state_= observation.clone().to(agent.q_eval.device)
         score = 0
         while not done:
 
             action = agent.choose_action(state_.unsqueeze_(0))
-            print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
+            #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
            
             
-            print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
+            #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
 
             if learn_:
@@ -52,8 +52,9 @@ if __name__ == '__main__':
                 agent.learn()
             state_ = observation_
             n_steps += 1
-            if done:
-            	print("finito")
+            #if done:
+            	#print("finito")
+
         scores.append(score)
         steps_array.append(n_steps)
 

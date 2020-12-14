@@ -52,7 +52,7 @@ class DDQNAgent(object):
         if np.random.random() > self.epsilon:
             state = observation.clone().to(self.q_eval.device)
             actions = self.q_eval.forward(state)
-            print(actions)
+            #print(actions)
             action = T.argmax(actions).item()
         else:
             action = np.random.choice(self.action_space)

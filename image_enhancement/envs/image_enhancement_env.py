@@ -77,33 +77,33 @@ class ImageEnhancementEnv(gym.Env):
 
 			act=action
 			if(act<3):
-				print("Action taken brightness positive in channel, ",int(act)," action",action)
+				#print("Action taken brightness positive in channel, ",int(act)," action",action)
 				temp_state=Act.brightness(temp_state,0.1,int(act)).squeeze()
 			else:
 				act=act-3
-				print("Action taken brightness negative in channel, ",int(act)," action",action)
+				#print("Action taken brightness negative in channel, ",int(act)," action",action)
 				temp_state = Act.brightness(temp_state, -0.1,int(act)).squeeze()
 
 		elif(action<12):
 			act=action-6
 			#print("*1", act)
 			if (act < 3):
-				print("Action taken gamma positive in channel, ",int(act)," action",action)
+				#print("Action taken gamma positive in channel, ",int(act)," action",action)
 				temp_state = Act.gamma_corr(temp_state, 0.6, int(act)).squeeze()
 			else:
 				act = act - 3
-				print("Action taken gamma negative in channel, ",int(act)," action",action)
+				#print("Action taken gamma negative in channel, ",int(act)," action",action)
 				temp_state = Act.gamma_corr(temp_state, 1.1, int(act)).squeeze()
 
 		elif(action<18):
 			act=action-12
 			#print("*1", act)
 			if (act < 3):
-				print("Action taken contrast positive in channel, ",int(act)," action",action)
+				#print("Action taken contrast positive in channel, ",int(act)," action",action)
 				temp_state = Act.contrast(temp_state, 0.8, int(act)).squeeze()
 			else:
 				act = act - 3
-				print("Action taken contrast negative in channel, ",int(act)," action",action)
+				#print("Action taken contrast negative in channel, ",int(act)," action",action)
 				temp_state = Act.contrast(temp_state, 2, int(act)).squeeze()
 		else:
 			print(action)
@@ -128,7 +128,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		#reward=reward-self.iteration*15
 
-		print(reward_state.item())
+		#print(reward_state.item())
 
 		done=0
 		#print("difference this state-targetstate",reward_state.item())
@@ -138,10 +138,10 @@ class ImageEnhancementEnv(gym.Env):
 
 		if reward_state.item()>self.initial_distance+(self.initial_distance/2):
 			done=1
-			print("Limite sforato")
-		if self.iteration>10:
+			#print("Limite sforato")
+		if self.iteration>15:
 			done=1
-			print("Max operazioni effettuate")
+			 #print("Max operazioni effettuate")
 
 		#print(reward_state.item())
 		#print(reward)

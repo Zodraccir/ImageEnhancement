@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6864dd74-fb83-4648-bc34-073e8a96d291" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/ExpTest/0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExpTest/9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ddqn_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/ddqn_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_ddqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_ddqn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rawTest/9.png" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1lVEGohRJEIV0GUUGAFCtrFevIX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6864dd74-fb83-4648-bc34-073e8a96d291" name="Default Changelist" comment="" />
+      <created>1607673765723</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607673765723</updated>
+    </task>
+    <servers />
+  </component>
+</project>
