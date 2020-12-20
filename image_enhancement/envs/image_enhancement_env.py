@@ -53,7 +53,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 	def __init__(self):
-		self.action_space = spaces.Discrete(18)
+		self.action_space = spaces.Discrete(6)
 		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
 		self.state = None
 		self.previus_state= None
@@ -73,38 +73,38 @@ class ImageEnhancementEnv(gym.Env):
 		#print(action)
 		self.iteration+=1
 		
-		if(action<6):
+		if(action<2):
 
 			act=action
-			if(act<3):
-				#print("Action taken brightness positive in channel, ",int(act)," action",action)
-				temp_state=Act.brightness(temp_state,0.1,int(act)).squeeze()
+			if(act<1):
+				#print("Action taken brightness positive, action",action)
+				temp_state=Act.brightness(temp_state,0.1).squeeze()
 			else:
-				act=act-3
-				#print("Action taken brightness negative in channel, ",int(act)," action",action)
-				temp_state = Act.brightness(temp_state, -0.1,int(act)).squeeze()
+				act=act-1
+				#print("Action taken brightness negative in channel, action",action)
+				temp_state = Act.brightness(temp_state, -0.1).squeeze()
 
-		elif(action<12):
-			act=action-6
+		elif(action<4):
+			act=action-2
 			#print("*1", act)
-			if (act < 3):
-				#print("Action taken gamma positive in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 0.6, int(act)).squeeze()
+			if (act < 1):
+				#print("Action taken gamma positive in channel,  action",action)
+				temp_state = Act.gamma_corr(temp_state, 0.6).squeeze()
 			else:
-				act = act - 3
-				#print("Action taken gamma negative in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 1.1, int(act)).squeeze()
+				act = act - 1
+				#print("Action taken gamma negative in channel,  action",action)
+				temp_state = Act.gamma_corr(temp_state, 1.1).squeeze()
 
-		elif(action<18):
-			act=action-12
+		elif(action<6):
+			act=action-4
 			#print("*1", act)
-			if (act < 3):
-				#print("Action taken contrast positive in channel, ",int(act)," action",action)
-				temp_state = Act.contrast(temp_state, 0.8, int(act)).squeeze()
+			if (act < 1):
+				#print("Action taken contrast positive in channel,  action",action)
+				temp_state = Act.contrast(temp_state, 0.8).squeeze()
 			else:
-				act = act - 3
-				#print("Action taken contrast negative in channel, ",int(act)," action",action)
-				temp_state = Act.contrast(temp_state, 2, int(act)).squeeze()
+				act = act - 1
+				#print("Action taken contrast negative in channel, action",action)
+				temp_state = Act.contrast(temp_state, 2 ).squeeze()
 		else:
 			print(action)
 
