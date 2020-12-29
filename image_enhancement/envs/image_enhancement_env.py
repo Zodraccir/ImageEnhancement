@@ -78,22 +78,22 @@ class ImageEnhancementEnv(gym.Env):
 			act=action
 			if(act<3):
 				#print("Action taken brightness positive in channel, ",int(act)," action",action)
-				temp_state=Act.brightness(temp_state,0.1,int(act)).squeeze()
+				temp_state=Act.brightness(temp_state,0.08,int(act)).squeeze()
 			else:
 				act=act-3
 				#print("Action taken brightness negative in channel, ",int(act)," action",action)
-				temp_state = Act.brightness(temp_state, -0.1,int(act)).squeeze()
+				temp_state = Act.brightness(temp_state, -0.08,int(act)).squeeze()
 
 		elif(action<12):
 			act=action-6
 			#print("*1", act)
 			if (act < 3):
 				#print("Action taken gamma positive in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 0.6, int(act)).squeeze()
+				temp_state = Act.gamma_corr(temp_state, 0.77, int(act)).squeeze()
 			else:
 				act = act - 3
 				#print("Action taken gamma negative in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 1.1, int(act)).squeeze()
+				temp_state = Act.gamma_corr(temp_state, 1.33, int(act)).squeeze()
 
 		elif(action<18):
 			act=action-12
@@ -104,7 +104,7 @@ class ImageEnhancementEnv(gym.Env):
 			else:
 				act = act - 3
 				#print("Action taken contrast negative in channel, ",int(act)," action",action)
-				temp_state = Act.contrast(temp_state, 2, int(act)).squeeze()
+				temp_state = Act.contrast(temp_state, 1.3, int(act)).squeeze()
 		else:
 			print(action)
 
