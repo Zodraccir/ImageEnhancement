@@ -53,7 +53,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 	def __init__(self):
-		self.action_space = spaces.Discrete(6)
+		self.action_space = spaces.Discrete(2)
 		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
 		self.state = None
 		self.previus_state= None
@@ -78,11 +78,11 @@ class ImageEnhancementEnv(gym.Env):
 			act=action
 			if(act<1):
 				#print("Action taken brightness positive, action",action)
-				temp_state=Act.brightness(temp_state,0.1).squeeze()
+				temp_state=Act.brightness(temp_state,0.08).squeeze()
 			else:
 				act=act-1
 				#print("Action taken brightness negative in channel, action",action)
-				temp_state = Act.brightness(temp_state, -0.1).squeeze()
+				temp_state = Act.brightness(temp_state, -0.08).squeeze()
 
 		elif(action<4):
 			act=action-2
