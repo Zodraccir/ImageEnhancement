@@ -79,9 +79,9 @@ class ImageEnhancementEnv(gym.Env):
 			if(act==0):
 				#print("Action taken brightness positive, action",action)
 				temp_state=Act.brightness(temp_state,0.08,int(act)).squeeze()
-			if(act==1):
+			elif(act==1):
 				temp_state=Act.brightness(temp_state,0.08,int(act)).squeeze()
-			else:
+			elif(act==2):
 				
 				#print("Action taken brightness negative in channel, action",action)
 				temp_state=Act.brightness(temp_state,0.08,int(act)).squeeze()
@@ -91,10 +91,10 @@ class ImageEnhancementEnv(gym.Env):
 			act=action-3
 			if(act==0):
 				temp_state=Act.brightness(temp_state,0.08,-int(act)).squeeze()
-			if (act==1):
+			elif (act==1):
 				#print("Action taken contrast positive in channel,  action",action)
 				temp_state=Act.brightness(temp_state,-0.08,int(act)).squeeze()
-			else:
+			elif(act==2):
 				#print("Action taken contrast negative in channel, action",action)
 				temp_state=Act.brightness(temp_state,-0.08,int(act)).squeeze()
 		else:
