@@ -29,6 +29,8 @@ if __name__ == '__main__':
     print(agent.q_eval.device)
     
     scores, eps_history, steps_array = [], [], []
+    
+    print(env.action_space.n)
 
     for i in range(n_games):
         done = False
