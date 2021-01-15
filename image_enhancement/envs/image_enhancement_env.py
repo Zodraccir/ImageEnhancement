@@ -47,6 +47,9 @@ def calculateDistance(i1, i2):
 def mse_loss(input, target):
     return torch.sum((input - target) ** 2)
 
+def l1(input, target):
+    return torch.sum((input - target))
+
 class ImageEnhancementEnv(gym.Env):
 	metadata = {'render.modes': ['human']}
 
@@ -104,8 +107,8 @@ class ImageEnhancementEnv(gym.Env):
 		self.state=temp_state
 
 		#print("action",self.state)
-		reward_state=mse_loss(self.target,self.state)
-		reward = mse_loss(self.target,self.previus_state)-reward_state
+		reward_state=l1(self.target,self.state)
+		reward = l1(self.target,self.previus_state)-reward_state
 		#print(reward_state)
 
 		threshold=2.0
@@ -187,7 +190,7 @@ class ImageEnhancementEnv(gym.Env):
 		#print (self.target)
 
 
-		self.initial_distance=mse_loss(self.target,self.state)
+		self.initial_distance=l1(self.target,self.state)
 
 
 		return self.state
