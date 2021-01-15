@@ -107,8 +107,8 @@ class ImageEnhancementEnv(gym.Env):
 		self.state=temp_state
 
 		#print("action",self.state)
-		reward_state=l1(self.target,self.state)
-		reward = l1(self.target,self.previus_state)-reward_state
+		reward_state=calculateDistance(self.target,self.state)
+		reward = calculateDistance(self.target,self.previus_state)-reward_state
 		#print(reward_state)
 
 		threshold=2.0
@@ -190,7 +190,7 @@ class ImageEnhancementEnv(gym.Env):
 		#print (self.target)
 
 
-		self.initial_distance=l1(self.target,self.state)
+		self.initial_distance=calculateDistance(self.target,self.state)
 
 
 		return self.state
