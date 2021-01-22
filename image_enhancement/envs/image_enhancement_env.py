@@ -68,7 +68,7 @@ class ImageEnhancementEnv(gym.Env):
 
 	def step(self, action):
 		assert self.action_space.contains(action)
-		self.previus_state=self.state
+		self.previus_state=self.state.detach().clone()
 		
 
 		self.penality[action]+=1
