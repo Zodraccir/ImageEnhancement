@@ -7,7 +7,7 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import torch
-
+from mpl_toolkits.axes_grid1 import ImageGrid
 
 import os,random
 
@@ -41,11 +41,46 @@ class Act():
         return mod
 	
 
-def calculateDistance(i1, i2):
-	return torch.dist(i1,i2,2)
-	
-def mse_loss(input, target):
-    return torch.sum((input - target) ** 2)
+def calculateDistance(i1, i2,p=2,type_distance=2):
+	return torch.sum((i1 - i2) ** type_distance)
+	#return torch.dist(i1,i2,p)
+
+def performAction(action,img):
+	temp_state = img.unsqueeze_(0)
+	#print(action)
+	if (action < 6):
+		act = action
+		if (act < 3):
+			# print("Action taken brightness positive in channel, ",int(act)," action",action)
+			return Act.brightness(temp_state, 0.08, int(act)).squeeze()
+		else:
+			act = act - 3
+			# print("Action taken brightness negative in channel, ",int(act)," action",action)
+			return Act.brightness(temp_state, -0.08, int(act)).squeeze()
+
+	elif (action < 12):
+		act = action - 6
+		# print("*1", act)
+		if (act < 3):
+			# print("Action taken gamma positive in channel, ",int(act)," action",action)
+			return Act.gamma_corr(temp_state, 1 / 1.33, int(act)).squeeze()
+		else:
+			act = act - 3
+			# print("Action taken gamma negative in channel, ",int(act)," action",action)
+			return Act.gamma_corr(temp_state, 1.33, int(act)).squeeze()
+	elif (action < 18):
+		act = action - 12
+		# print("*1", act)
+		if (act < 3):
+			# print("Action taken contrast positive in channel, ",int(act)," action",action)
+			return Act.contrast(temp_state, 0.8, int(act)).squeeze()
+		else:
+			act = act - 3
+			# print("Action taken contrast negative in channel, ",int(act)," action",action)
+			return Act.contrast(temp_state, 1.2, int(act)).squeeze()
+	else:
+		print(action)
+
 
 class ImageEnhancementEnv(gym.Env):
 	metadata = {'render.modes': ['human']}
@@ -53,151 +88,85 @@ class ImageEnhancementEnv(gym.Env):
 
 
 	def __init__(self):
+
+		#da capire come parametrizzare
 		self.action_space = spaces.Discrete(18)
 		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
+		self.type_distance=1
+
+
 		self.state = None
 		self.previus_state= None
 		self.target= None
-		self.penality=None
-		self.iteration=0
+		self.steps=0
 		self.initial_distance=None
+		self.done=0
+		self.startImage = None
+
+
+
 
 
 	def step(self, action):
 		assert self.action_space.contains(action)
-		self.previus_state=self.state
-		
-
-		self.penality[action]+=1
-		temp_state = self.state.unsqueeze_(0)
-		#print(action)
-		self.iteration+=1
-		
-		if(action<6):
-
-			act=action
-			if(act<3):
-				#print("Action taken brightness positive in channel, ",int(act)," action",action)
-				temp_state=Act.brightness(temp_state,0.08,int(act)).squeeze()
-			else:
-				act=act-3
-				#print("Action taken brightness negative in channel, ",int(act)," action",action)
-				temp_state = Act.brightness(temp_state, -0.08,int(act)).squeeze()
-
-		elif(action<12):
-			act=action-6
-			#print("*1", act)
-			if (act < 3):
-				#print("Action taken gamma positive in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 1/1.33, int(act)).squeeze()
-			else:
-				act = act - 3
-				#print("Action taken gamma negative in channel, ",int(act)," action",action)
-				temp_state = Act.gamma_corr(temp_state, 1.33, int(act)).squeeze()
-
-		elif(action<18):
-			act=action-12
-			#print("*1", act)
-			if (act < 3):
-				#print("Action taken contrast positive in channel, ",int(act)," action",action)
-				temp_state = Act.contrast(temp_state, 0.8, int(act)).squeeze()
-			else:
-				act = act - 3
-				#print("Action taken contrast negative in channel, ",int(act)," action",action)
-				temp_state = Act.contrast(temp_state, 1.2, int(act)).squeeze()
-		else:
-			print(action)
-
-		
-		self.state=temp_state
-
-		#print("action",self.state)
-		reward_state=mse_loss(self.target,self.state)
-		reward = mse_loss(self.target,self.previus_state)-reward_state
-		#print(reward_state)
-
+		self.previus_state=self.state.detach().clone()
+		self.steps+=1
+		self.state=performAction(action,self.state)
+		distance_state = calculateDistance(self.target,self.state)
+		distance_previus_state= calculateDistance(self.target,self.previus_state)
+		reward = distance_previus_state-distance_state
 		threshold=2.0
-		max_threshold=-120
-		#print(reward)
-
-		#reward=2*reward
-
-		#if(self.penality[action]>1):
-			#reward_state=reward_state- self.penality[action]*50
-			#reward=reward-self.penality[action]*100
-
-		#reward=reward-self.iteration*15
-
-		#print(reward_state.item())
 
 		done=0
-		#print("difference this state-targetstate",reward_state.item())
-		if abs(reward_state.item())<threshold:
+
+		if abs(distance_state.item())<threshold:
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if reward_state.item()>self.initial_distance+(self.initial_distance/2):
+		if distance_state.item()>self.initial_distance+(self.initial_distance/2):
 			done=1
-			#print("Limite sforato")
-		if self.iteration>15:
+			print("Limite sforato")
+		if self.steps>15:
 			done=1
-			 #print("Max operazioni effettuate")
+			#print("Max operazioni effettuate")
 
 		#print(reward_state.item())
 		#print(reward)
 
-		return self.state.clone(), reward, done, self.penality
+		return self.state.clone(), reward, done, distance_state
 
 
 	def reset(self):
+		self.done=0
 
+		transform = T.Compose([T.ToTensor()])
 
-		
-		self.iteration=0
+		self.steps=0
 		file=random.choice(os.listdir("rawTest"))
-		#file=os.listdir("rawTest")[m]
-		img_path = "rawTest/"+file
+
+		img_path_raw = "rawTest/"+file
 		
+		print("img_path",img_path_raw)
+
+		img = cv2.imread(img_path_raw)
+
+		rawImage = transform(img)
+
+		img_path_exp = "ExpTest/"+file
+
+
+		img = cv2.imread(img_path_exp)
+		expImage = transform(img)
+
 		
+		self.target=expImage.detach().clone()
+
+		self.state=rawImage.detach().clone()
+
+		self.startImage=rawImage.detach().clone()
+
+		self.initial_distance=calculateDistance(self.target,self.state)
 		
-		print("img_path",img_path)
-		#img_path="img.png"
-		#print(file)
-
-		transform = T.Compose([T.ToTensor()])
-		img = cv2.imread(img_path)
-		height, width, channels = img.shape
-
-		#print(height, width, channels)
-		img1 = transform(img)
-		#im2 = img1.numpy()
-		# print(im2)
-		# im2=im2.astype('int8')
-		#im2 = np.transpose(im2, (1, 2, 0))
-
-		img_path1 = "ExpTest/"+file
-		#img_path1="final.png"
-
-		transform = T.Compose([T.ToTensor()])
-		im = cv2.imread(img_path1)
-		im1 = transform(im)
-		#i2 = im1.numpy()
-		# print(im2)
-		# im2=im2.astype('int8')
-		#i2 = np.transpose(i2, (1, 2, 0))
-		
-		self.target=im1
-
-		self.state=img1
-
-		self.penality=dict.fromkeys(range(self.action_space.n), 0)
-
-		#print (self.target)
-
-
-		self.initial_distance=mse_loss(self.target,self.state)
-
-
 		return self.state
 
 	def render(self):
@@ -205,7 +174,25 @@ class ImageEnhancementEnv(gym.Env):
 		plt.imshow(cv2.cvtColor(rdner, cv2.COLOR_BGR2RGB))
 		plt.show()
 
+	def multiRender(self):
+		imIn = np.transpose(self.startImage.numpy(), (1, 2, 0))
+		imOut = np.transpose(self.state.numpy(), (1, 2, 0))
+		imTarget = np.transpose(self.target.numpy(), (1, 2, 0))
+		imDiff = np.transpose((self.startImage - self.state).numpy(), (1, 2, 0))
 
+		fig = plt.figure(figsize=(4., 4.))
+		grid = ImageGrid(fig, 111,  # similar to subplot(111)
+						 nrows_ncols=(2, 2),  # creates 2x2 grid of axes
+						 axes_pad=0.1,  # pad between axes in inch.
+						 )
+
+		for ax, im in zip(grid, [imIn, imOut, imTarget, imDiff]):
+			# Iterating over the grid returns the Axes.
+			ax.imshow(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
+
+		plt.show()
+
+	# fig.show()
 	def save(self,name):
 		#print(self.state)
 		rdner = np.transpose(self.state.numpy(), (1, 2, 0))

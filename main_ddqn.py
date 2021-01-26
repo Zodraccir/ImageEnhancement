@@ -3,17 +3,38 @@ import numpy as np
 from ddqn_agent import DDQNAgent
 import image_enhancement
 from utils import plot_learning_curve, make_env
+import sys
+import argparse
+
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ngames', '-n', help="a number of games", type=int, default=1000)
+    parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
+
+    #print(parser.format_help())
+    # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
+    #
+    # optional arguments:
+    #      -h, --help         show this help message and exit
+    #   --foo FOO, -f FOO  a random options
+    #   --bar BAR, -b BAR  a more random option
+
+    args = parser.parse_args()
+    #print(args)  # Namespace(bar=0, foo='pouet')
+    #print(args.ngames)  # pouet
+    #print(args.epsdecay)  # 0
+
     env = gym.make('image_enhancement-v0')
     best_score = -np.inf
     load_checkpoint = True
     learn_= True
-    n_games = 18000
+    n_games = args.ngames
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=1000, eps_min=0.05,
-                     batch_size=64, replace=500, eps_dec=2e-5,
+                     batch_size=64, replace=500, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
@@ -26,7 +47,7 @@ if __name__ == '__main__':
 
     n_steps = 0
     
-    print(agent.q_eval.device)
+    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games)
     
     scores, eps_history, steps_array = [], [], []
 
@@ -59,7 +80,7 @@ if __name__ == '__main__':
         steps_array.append(n_steps)
 
         avg_score = np.mean(scores[-100:])
-        print('episode: ', i,'score: ', score,
+        print('episode: ', i+1,'/',n_games,'score: ', score,
              ' average score %.1f' % avg_score, 'best score %.2f' % best_score,
             'epsilon %.2f' % agent.epsilon, 'steps', n_steps)
 
