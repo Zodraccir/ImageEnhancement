@@ -41,7 +41,7 @@ class Act():
         return mod
 	
 
-def calculateDistance(i1, i2,p=2,type_distance=2):
+def calculateDistance(i1, i2,p=2,type_distance=1):
 	return torch.sum((i1 - i2) ** type_distance)
 	#return torch.dist(i1,i2,p)
 
