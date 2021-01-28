@@ -52,7 +52,8 @@ def performAction(action,img):
 		return Act.brightness(temp_state, 0.08).squeeze()
 	elif(action==1):
 		return Act.brightness(temp_state, -0.08).squeeze()
-	
+	else:
+		print(action)
 		
 	'''
 	if (action < 6):
@@ -85,10 +86,10 @@ def performAction(action,img):
 			act = act - 3
 			# print("Action taken contrast negative in channel, ",int(act)," action",action)
 			return Act.contrast(temp_state, 1.2, int(act)).squeeze()
-	'''
 	else:
 		print(action)
-
+	'''
+	
 
 class ImageEnhancementEnv(gym.Env):
 	metadata = {'render.modes': ['human']}
