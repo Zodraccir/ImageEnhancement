@@ -41,13 +41,20 @@ class Act():
         return mod
 	
 
-def calculateDistance(i1, i2,p=2,type_distance=1):
+def calculateDistance(i1, i2,p=2,type_distance=2):
 	return torch.sum((i1 - i2) ** type_distance)
 	#return torch.dist(i1,i2,p)
 
 def performAction(action,img):
 	temp_state = img.unsqueeze_(0)
 	#print(action)
+	if(action==0):
+		return Act.brightness(temp_state, 0.08).squeeze()
+	elif(action==1):
+		return Act.brightness(temp_state, -0.08).squeeze()
+	
+		
+	'''
 	if (action < 6):
 		act = action
 		if (act < 3):
@@ -78,6 +85,7 @@ def performAction(action,img):
 			act = act - 3
 			# print("Action taken contrast negative in channel, ",int(act)," action",action)
 			return Act.contrast(temp_state, 1.2, int(act)).squeeze()
+	'''
 	else:
 		print(action)
 
