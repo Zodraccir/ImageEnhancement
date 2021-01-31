@@ -104,7 +104,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		#da capire come parametrizzare
 		self.action_space = spaces.Discrete(4)
-		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
+		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 		self.type_distance=1
 
 
@@ -162,6 +162,7 @@ class ImageEnhancementEnv(gym.Env):
 		print("img_path",img_path_raw)
 
 		img = cv2.imread(img_path_raw)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 
 		rawImage = transform(img)
 
@@ -169,6 +170,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		img = cv2.imread(img_path_exp)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 		expImage = transform(img)
 
 		
