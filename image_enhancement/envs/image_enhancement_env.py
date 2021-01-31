@@ -103,7 +103,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(2)
+		self.action_space = spaces.Discrete(4)
 		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
 		self.type_distance=1
 
