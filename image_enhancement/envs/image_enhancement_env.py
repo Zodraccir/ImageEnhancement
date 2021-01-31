@@ -52,6 +52,10 @@ def performAction(action,img):
 		return Act.brightness(temp_state, 0.08).squeeze()
 	elif(action==1):
 		return Act.brightness(temp_state, -0.08).squeeze()
+	elif(action==2):
+		return Act.contrast(temp_state, 0.8).squeeze()
+	elif(action==3):
+		return Act.contrast(temp_state, 1.2).squeeze()
 	else:
 		print(action)
 		
