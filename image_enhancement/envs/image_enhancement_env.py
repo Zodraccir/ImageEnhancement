@@ -128,7 +128,7 @@ class ImageEnhancementEnv(gym.Env):
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state
-		threshold=0.0001
+		threshold=0.1
 
 		done=0
 
@@ -136,7 +136,7 @@ class ImageEnhancementEnv(gym.Env):
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>self.initial_distance*10:
+		if distance_state.item()>self.initial_distance*2:
 			done=1
 			print("Limite sforato")
 		if self.steps>15:
