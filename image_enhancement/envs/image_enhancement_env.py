@@ -40,9 +40,9 @@ class Act():
             mod = torch.clamp(torch.mean(mod) + alpha * (mod - torch.mean(mod)), 0, 1)
         return mod
 	
-
-def calculateDistance(i1, i2,p=2,type_distance=1):
-	return torch.mean((i1 - i2) ** type_distance)
+def calculateDistance(i1, i2,p=2,type_distance=2):
+	return torch.sqrt(torch.sum((i1 - i2) ** type_distance))
+	
 	#return torch.dist(i1,i2,p)
 
 def performAction(action,img):
