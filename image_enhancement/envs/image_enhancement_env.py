@@ -41,7 +41,7 @@ class Act():
         return mod
 	
 
-def calculateDistance(i1, i2,p=2,type_distance=2):
+def calculateDistance(i1, i2,p=2,type_distance=1):
 	return torch.mean((i1 - i2) ** type_distance)
 	#return torch.dist(i1,i2,p)
 
@@ -128,7 +128,7 @@ class ImageEnhancementEnv(gym.Env):
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state
-		threshold=2.0
+		threshold=0.0001
 
 		done=0
 
@@ -136,7 +136,7 @@ class ImageEnhancementEnv(gym.Env):
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>self.initial_distance+(self.initial_distance/2):
+		if distance_state.item()>self.initial_distance**2:
 			done=1
 			print("Limite sforato")
 		if self.steps>15:
