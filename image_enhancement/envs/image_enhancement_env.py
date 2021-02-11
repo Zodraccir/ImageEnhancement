@@ -40,8 +40,21 @@ class Act():
             mod = torch.clamp(torch.mean(mod) + alpha * (mod - torch.mean(mod)), 0, 1)
         return mod
 	
-def calculateDistance(i1, i2,p=2,type_distance=2):
-	return torch.sum((i1 - i2) ** type_distance)
+def calculateDistance(i1, i2,p=2,type_distance=1):
+	if(type_distance==0):
+		return torch.mean((i1 - i2) ** 2)
+	elif(type_distance==1):
+		return torch.std((i1 - i2) ** 2)
+	elif(type_distance==2):
+		return torch.sum((i1-i2) **2)
+	elif(type_distance==3):
+		return torch.sqrt(torch.sum((i1-i2) **2 ))
+	elif(type_distance==4):
+		return torch.dist(i1,i2,1)
+	elif(type_distance==5):
+		return torch.dist(i1,i2,2)
+	else:
+		return 0
 	
 	#return torch.dist(i1,i2,p)
 
@@ -117,7 +130,8 @@ class ImageEnhancementEnv(gym.Env):
 		self.startImage = None
 
 
-
+	def setTypeDistance(self,type_distance):
+		self.type_distance=type_distance
 
 
 	def step(self, action):

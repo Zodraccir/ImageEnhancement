@@ -12,6 +12,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--ngames', '-n', help="a number of games", type=int, default=1000)
     parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
+    parser.add_argument('--type', '-t', help="type distance", type=int, default=2)
 
     #print(parser.format_help())
     # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
@@ -27,6 +28,7 @@ if __name__ == '__main__':
     #print(args.epsdecay)  # 0
 
     env = gym.make('image_enhancement-v0')
+    env.setTypeDistance(type_distance)
     best_score = -np.inf
     load_checkpoint = True
     learn_= True
@@ -82,7 +84,7 @@ if __name__ == '__main__':
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
              ' average score %.1f' % avg_score, 'best score %.2f' % best_score,
-            'epsilon %.2f' % agent.epsilon, 'steps', n_steps)
+            'epsilon %.2f' % agent.epsilon, 'steps', n_steps ,' distance used: ',type_distance)
 
         if avg_score > best_score:
             #if not load_checkpoint:
