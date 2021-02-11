@@ -142,7 +142,7 @@ class ImageEnhancementEnv(gym.Env):
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state
-		threshold=0.1
+		threshold=0.0000001
 
 		done=0
 
