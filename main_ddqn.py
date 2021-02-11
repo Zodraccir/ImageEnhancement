@@ -28,6 +28,7 @@ if __name__ == '__main__':
     #print(args.epsdecay)  # 0
 
     env = gym.make('image_enhancement-v0')
+    type_distance=args.type
     env.setTypeDistance(type_distance)
     best_score = -np.inf
     load_checkpoint = True
