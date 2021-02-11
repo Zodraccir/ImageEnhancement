@@ -29,6 +29,8 @@ if __name__ == '__main__':
 
     env = gym.make('image_enhancement-v0')
     type_distance=args.type
+    
+  
     env.setTypeDistance(type_distance)	
     best_score = -np.inf
     load_checkpoint = True
@@ -38,7 +40,8 @@ if __name__ == '__main__':
     _ , lripotetic = env.reset()
     
     lri=lripotetic/100
-    
+    if(lri>1):
+    	lri=0.1
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=lri,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=1000, eps_min=0.05,
@@ -90,7 +93,7 @@ if __name__ == '__main__':
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
              ' average score %.1f' % avg_score, 'best score %.2f' % best_score,
-            'epsilon %.2f' % agent.epsilon, 'steps', n_steps ,' distance used: ',type_distance, 'learning rate used ',lri)
+            'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps ,' distance used: ',type_distance, 'learning rate used ',lri)
 
         if avg_score > best_score:
             #if not load_checkpoint:

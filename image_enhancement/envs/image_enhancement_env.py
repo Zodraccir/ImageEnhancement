@@ -40,7 +40,8 @@ class Act():
             mod = torch.clamp(torch.mean(mod) + alpha * (mod - torch.mean(mod)), 0, 1)
         return mod
 	
-def calculateDistance(i1, i2,p=2,type_distance=1):
+def calculateDistance(i1, i2,type_distance=1):
+
 	if(type_distance==0):
 		return torch.mean((i1 - i2) ** 2)
 	elif(type_distance==1):
@@ -121,8 +122,8 @@ class ImageEnhancementEnv(gym.Env):
 
 		#da capire come parametrizzare
 		self.action_space = spaces.Discrete(6)
-		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
-		self.type_distance=1
+		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
+		self.type_distance=None
 
 
 		self.state = None
@@ -136,6 +137,7 @@ class ImageEnhancementEnv(gym.Env):
 
 	def setTypeDistance(self,type_distance):
 		self.type_distance=type_distance
+		#print(self.type_distance,type_distance)
 
 
 	def step(self, action):
@@ -180,7 +182,7 @@ class ImageEnhancementEnv(gym.Env):
 		print("img_path",img_path_raw)
 
 		img = cv2.imread(img_path_raw)
-		#img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 
 		rawImage = transform(img)
 
@@ -188,7 +190,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		img = cv2.imread(img_path_exp)
-		#img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 		expImage = transform(img)
 
 		
@@ -199,6 +201,7 @@ class ImageEnhancementEnv(gym.Env):
 		self.startImage=rawImage.detach().clone()
 
 		self.initial_distance=calculateDistance(self.target,self.state,self.type_distance)
+		
 		
 		return self.state, self.initial_distance
 
