@@ -139,8 +139,8 @@ class ImageEnhancementEnv(gym.Env):
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		self.state=performAction(action,self.state)
-		distance_state = calculateDistance(self.target,self.state)
-		distance_previus_state= calculateDistance(self.target,self.previus_state)
+		distance_state = calculateDistance(self.target,self.state,self.type_distance)
+		distance_previus_state= calculateDistance(self.target,self.previus_state,self.type_distance)
 		reward = distance_previus_state-distance_state
 		threshold=0.0000001
 
@@ -194,9 +194,9 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.startImage=rawImage.detach().clone()
 
-		self.initial_distance=calculateDistance(self.target,self.state)
+		self.initial_distance=calculateDistance(self.target,self.state,self.type_distance)
 		
-		return self.state
+		return self.state, self.intial_distance
 
 	def render(self):
 		rdner=np.transpose(self.state.numpy(),(1,2,0))
