@@ -40,7 +40,7 @@ if __name__ == '__main__':
     _ , lripotetic = env.reset()
     
     lri=lripotetic/100
-    if(lri>1):
+    if(lri>0.1):
     	lri=0.1
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=lri,
                      input_dims=(env.observation_space.shape),
