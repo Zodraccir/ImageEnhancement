@@ -196,7 +196,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.initial_distance=calculateDistance(self.target,self.state,self.type_distance)
 		
-		return self.state, self.intial_distance
+		return self.state, self.initial_distance
 
 	def render(self):
 		rdner=np.transpose(self.state.numpy(),(1,2,0))
