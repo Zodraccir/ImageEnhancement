@@ -69,6 +69,10 @@ def performAction(action,img):
 		return Act.contrast(temp_state, 0.8).squeeze()
 	elif(action==3):
 		return Act.contrast(temp_state, 1.2).squeeze()
+	elif(action==4):
+		return Act.gamma_corr(temp_state,1/1.33).squeeze()
+	elif(action==5):
+		return Act.gamma_corr(temp_state,1.33).squeeze()
 	else:
 		print(action)
 		
@@ -116,7 +120,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(4)
+		self.action_space = spaces.Discrete(6)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 		self.type_distance=1
 
