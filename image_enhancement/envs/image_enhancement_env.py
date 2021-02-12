@@ -173,10 +173,10 @@ class ImageEnhancementEnv(gym.Env):
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>self.initial_distance*2:
+		if distance_state.item()>self.initial_distance+0.2*self.initial_distance:
 			done=1
 			print("Limite sforato")
-		if self.steps>15:
+		if self.steps>50:
 			done=1
 			#print("Max operazioni effettuate")
 
