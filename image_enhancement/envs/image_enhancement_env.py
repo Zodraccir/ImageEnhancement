@@ -40,7 +40,7 @@ class Act():
             mod = torch.clamp(torch.mean(mod) + alpha * (mod - torch.mean(mod)), 0, 1)
         return mod
 	
-def calculateDistance(i1, i2,type_distance=1):
+def calculateDistance(i1, i2,type_distance=0):
 
 	if(type_distance==0):
 		return torch.mean((i1 - i2) ** 2)
@@ -61,6 +61,7 @@ def calculateDistance(i1, i2,type_distance=1):
 
 def performAction(action,img):
 	temp_state = img.unsqueeze_(0)
+	'''
 	#print(action)
 	if(action==0):
 		return Act.brightness(temp_state, 0.08).squeeze()
@@ -82,11 +83,27 @@ def performAction(action,img):
 		act = action
 		if (act < 3):
 			# print("Action taken brightness positive in channel, ",int(act)," action",action)
-			return Act.brightness(temp_state, 0.08, int(act)).squeeze()
+			return Act.brightness(temp_state, 0.02, int(act)).squeeze()
 		else:
 			act = act - 3
 			# print("Action taken brightness negative in channel, ",int(act)," action",action)
-			return Act.brightness(temp_state, -0.08, int(act)).squeeze()
+			return Act.brightness(temp_state, -0.02, int(act)).squeeze()
+	if(action==6):
+		return Act.brightness(temp_state, 0.08).squeeze()
+	elif(action==7):
+		return Act.brightness(temp_state, -0.08).squeeze()
+	elif(action==8):
+		return Act.contrast(temp_state, 0.8).squeeze()
+	elif(action==9):
+		return Act.contrast(temp_state, 1.2).squeeze()
+	elif(action==10):
+		return Act.gamma_corr(temp_state,1/1.33).squeeze()
+	elif(action==11):
+		return Act.gamma_corr(temp_state,1.33).squeeze()
+	else:
+		print(action)
+	
+	'''
 
 	elif (action < 12):
 		act = action - 6
@@ -122,7 +139,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		#da capire come parametrizzare
 		self.action_space = spaces.Discrete(6)
-		self.observation_space = spaces.Box(0, 255, [3, 256, 256])
+		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 		self.type_distance=None
 
 
@@ -182,7 +199,7 @@ class ImageEnhancementEnv(gym.Env):
 		print("img_path",img_path_raw)
 
 		img = cv2.imread(img_path_raw)
-		#img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 
 		rawImage = transform(img)
 
@@ -190,7 +207,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		img = cv2.imread(img_path_exp)
-		#img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
+		img = cv2.resize(img, (64, 64), interpolation = cv2.INTER_AREA)
 		expImage = transform(img)
 
 		
@@ -203,7 +220,7 @@ class ImageEnhancementEnv(gym.Env):
 		self.initial_distance=calculateDistance(self.target,self.state,self.type_distance)
 		
 		
-		return self.state, self.initial_distance
+		return self.state
 
 	def render(self):
 		rdner=np.transpose(self.state.numpy(),(1,2,0))

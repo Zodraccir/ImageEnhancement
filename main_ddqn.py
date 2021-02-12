@@ -37,12 +37,8 @@ if __name__ == '__main__':
     learn_= True
     n_games = args.ngames
     
-    _ , lripotetic = env.reset()
     
-    lri=lripotetic/100
-    if(lri>0.1):
-    	lri=0.1
-    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=lri,
+    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.0001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=1000, eps_min=0.05,
                      batch_size=256, replace=500, eps_dec=args.epsdecay,
@@ -65,7 +61,7 @@ if __name__ == '__main__':
     for i in range(n_games):
         done = False
         #print(".......... EPISODE "+str(i)+" --------------")
-        observation , _= env.reset()
+        observation = env.reset()
         state_= observation.clone().to(agent.q_eval.device)
         score = 0
         while not done:
