@@ -41,7 +41,7 @@ if __name__ == '__main__':
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.0001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=10000, eps_min=0.05,
-                     batch_size=512, replace=2000, eps_dec=args.epsdecay,
+                     batch_size=128, replace=2000, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
