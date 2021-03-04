@@ -46,11 +46,12 @@ class DeepQNetwork(nn.Module):
 
     def save_checkpoint(self):
         print('... saving checkpoint ...')
-        T.save(self.state_dict(), self.checkpoint_file)
+        T.save(self, self.checkpoint_file)
 
     def load_checkpoint(self):
         print('... loading checkpoint ...')
         if(os.path.isfile(self.checkpoint_file)):
-        	self.load_state_dict(T.load(self.checkpoint_file))
+        	self.load(T.load(self.checkpoint_file))
+        	self.train()
         else:
         	print("file not exists")
