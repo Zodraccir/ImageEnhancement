@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
-             ' average score %.1f' % avg_score, 'best score %.2f' % best_score,
+             ' average score %.3f' % avg_score, 'best score %.3f' % best_score,
             'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps ,' distance used: ',type_distance)
 
         if avg_score > best_score:
