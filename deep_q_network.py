@@ -51,7 +51,7 @@ class DeepQNetwork(nn.Module):
     def load_checkpoint(self):
         print('... loading checkpoint ...')
         if(os.path.isfile(self.checkpoint_file)):
-        	self.load(T.load(self.checkpoint_file))
+        	self=T.load(T.load(self.checkpoint_file))
         	self.train()
         else:
         	print("file not exists")
