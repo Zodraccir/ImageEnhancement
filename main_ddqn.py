@@ -5,6 +5,8 @@ import image_enhancement
 from utils import plot_learning_curve, make_env
 import sys
 import argparse
+import random,os,cv2
+
 
 
 if __name__ == '__main__':
@@ -12,7 +14,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--ngames', '-n', help="a number of games", type=int, default=1000)
     parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
-    parser.add_argument('--type', '-t', help="type distance", type=int, default=2)
 
     #print(parser.format_help())
     # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
@@ -28,10 +29,8 @@ if __name__ == '__main__':
     #print(args.epsdecay)  # 0
 
     env = gym.make('image_enhancement-v0')
-    type_distance=args.type
-    
+
   
-    env.setTypeDistance(type_distance)	
     best_score = -np.inf
     load_checkpoint = True
     learn_= True
@@ -41,12 +40,12 @@ if __name__ == '__main__':
     agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.0002,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=10000, eps_min=0.05,
-                     batch_size=64, replace=250, eps_dec=args.epsdecay,
+                     batch_size=32, replace=250, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
     if load_checkpoint:
-        agent.load_models()
+        agent.load_models(learn_)
 
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) +'_' \
             + str(n_games) + 'games'
@@ -58,10 +57,27 @@ if __name__ == '__main__':
     
     scores, eps_history, steps_array = [], [], []
 
+    img_list=os.listdir("rawTest")[:300]
+    '''
+    file = random.choice(os.listdir("rawTest"))
+    img_path_raw = "rawTest/" + file
+    print("img_path", img_path_raw)
+    raw = cv2.imread(img_path_raw)
+    img_path_exp = "ExpTest/" + file
+    target = cv2.imread(img_path_exp)
+    '''
     for i in range(n_games):
         done = False
+
         #print(".......... EPISODE "+str(i)+" --------------")
-        observation = env.reset()
+        file=random.choice(img_list)
+        img_path_raw = "rawTest/"+file
+        print("img_path",img_path_raw)
+        raw = cv2.imread(img_path_raw)
+        img_path_exp = "ExpTest/"+file
+        target = cv2.imread(img_path_exp)
+
+        observation = env.reset(raw,target)
         state_= observation.clone().to(agent.q_eval.device)
         score = 0
         while not done:
@@ -83,18 +99,19 @@ if __name__ == '__main__':
             #if done:
             	#print("finito")
 
-        scores.append(score)
+        scores.append(score)  
         steps_array.append(n_steps)
 
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
              ' average score %.3f' % avg_score, 'best score %.3f' % best_score,
-            'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps ,' distance used: ',type_distance)
+            'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps )
 
         if avg_score > best_score:
             #if not load_checkpoint:
             #    agent.save_models()
             best_score = avg_score
+
 
         eps_history.append(agent.epsilon)
         #if load_checkpoint and n_steps >= 18000:

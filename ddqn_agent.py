@@ -100,8 +100,7 @@ class DDQNAgent(object):
         self.q_eval.save_checkpoint()
         self.q_next.save_checkpoint()
 
-    def load_models(self):
-        self.q_eval.load_checkpoint()
-        self.q_next.load_checkpoint()
-        self.q_eval.train()
-        self.q_next.train()
+    def load_models(self,learn):
+        self.q_eval.load_checkpoint(learn)
+        self.q_next.load_checkpoint(learn)
+
