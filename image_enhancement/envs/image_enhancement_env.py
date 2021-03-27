@@ -162,16 +162,16 @@ class ImageEnhancementEnv(gym.Env):
 		#print("img_path",img_path_raw)
 
 		#img = cv2.imread(img_path_raw)
-		img = cv2.resize(raw, (64, 64), interpolation = cv2.INTER_AREA)
+		img_raw = cv2.resize(raw, (64, 64), interpolation = cv2.INTER_AREA)
 
-		rawImage = transform(raw)
+		rawImage = transform(img_raw)
 
 		#img_path_exp = "ExpTest/"+file
 
 
 		#img = cv2.imread(img_path_exp)
-		img = cv2.resize(target, (64, 64), interpolation = cv2.INTER_AREA)
-		expImage = transform(target)
+		img_exp = cv2.resize(target, (64, 64), interpolation = cv2.INTER_AREA)
+		expImage = transform(img_exp)
 
 		
 		self.target=expImage.detach().clone()
