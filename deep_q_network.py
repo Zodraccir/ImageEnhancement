@@ -56,13 +56,15 @@ class DeepQNetwork(nn.Module):
     def load_checkpoint(self,learn):
         print('... loading checkpoint ...')
         if(os.path.isfile(self.checkpoint_file)):
-            checkpoint=T.load(self.checkpoint_file)
+            checkpoint=T.load(self.checkpoint_file, map_location=self.device)
             self.load_state_dict(checkpoint['model_state_dict'])
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             self.loss=checkpoint['loss']
             if(learn):
+                print("training mode")
                 self.train()
             else:
+                print("evaluation mode")
                 self.eval()
         else:
         	print("file not exists")

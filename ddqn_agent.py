@@ -58,6 +58,26 @@ class DDQNAgent(object):
             action = np.random.choice(self.action_space)
 
         return action
+    
+    def choose_best_action(self, observation):
+        state = observation.clone().to(self.q_eval.device)
+        actions = self.q_eval.forward(state)
+        print(actions)
+
+        # if(len(T.nonzero(T.max(actions,T.tensor([0.])))) < 1):
+        # print("nein")
+        # return -1
+        posact = False
+        for a in actions.detach().numpy()[0]:
+            # print(a)
+            if (a > 0):
+                posact = True
+        if (not posact):
+            return -1
+        action = T.argmax(actions).item()
+
+        return action
+
 
     def replace_target_network(self):
         if self.replace_target_cnt is not None and \

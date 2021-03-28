@@ -3,9 +3,33 @@ import numpy as np
 from ddqn_agent import DDQNAgent
 import image_enhancement
 from utils import plot_learning_curve, make_env
+import argparse
+import os
+import cv2
+import random
+
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ngames', '-n', help="a number of games", type=int, default=1000)
+    parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
+    #print(parser.format_help())
+    # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
+    #
+    # optional arguments:
+    #      -h, --help         show this help message and exit
+    #   --foo FOO, -f FOO  a random options
+    #   --bar BAR, -b BAR  a more random option
+
+    args = parser.parse_args()
+    #print(args)  # Namespace(bar=0, foo='pouet')
+    #print(args.ngames)  # pouet
+    #print(args.epsdecay)  # 0
+
     env = gym.make('image_enhancement-v0')
+
+    #env = gym.make('image_enhancement-v0')
     best_score = -np.inf
     load_checkpoint = True
     learn_= False
@@ -18,7 +42,7 @@ if __name__ == '__main__':
                      env_name='image_enhancement-v0')
 
     if load_checkpoint:
-        agent.load_models()
+        agent.load_models(learn_)
 
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) +'_' \
             + str(n_games) + 'games'
@@ -29,22 +53,38 @@ if __name__ == '__main__':
     print(agent.q_eval.device)
     
     scores, eps_history, steps_array = [], [], []
+    img_list=os.listdir("rawTest")[69:70]
 
     for i in range(n_games):
         done = False
+
+
         #print(".......... EPISODE "+str(i)+" --------------")
-        observation = env.reset()
+        file=random.choice(img_list)
+        img_path_raw = "rawTest/"+file
+        print("img_path",img_path_raw)
+        raw = cv2.imread(img_path_raw)
+        img_path_exp = "ExpTest/"+file
+        target = cv2.imread(img_path_exp)
+
+        observation = env.reset(raw,target)
+
+        #print(".......... EPISODE "+str(i)+" --------------")
         state_= observation.clone().to(agent.q_eval.device)
         score = 0
         n_step=0
         final_distance=None
-        
+        actions_done =[]
         while not done:
 		
-            action = agent.choose_action(state_.unsqueeze_(0))
+            action = agent.choose_best_action(state_.unsqueeze_(0))
+            
             if(action==-1):
             	print("finito no positive action")
             	break
+            
+            actions_done.append(action)
+            
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
            
@@ -65,12 +105,12 @@ if __name__ == '__main__':
 
         scores.append(score)
         steps_array.append(n_steps)
-        env.multiRender()
+        
+        env.doStepOriginal(actions_done)
         
         avg_score = np.mean(scores[-100:])
         print('episode: ', i,'score: ', score , ' step' , n_step, 'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
-        
-
+        env.multiRender()
         if avg_score > best_score:
             #if not load_checkpoint:
             #    agent.save_models()

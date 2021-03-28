@@ -57,7 +57,9 @@ if __name__ == '__main__':
     
     scores, eps_history, steps_array = [], [], []
 
-    img_list=os.listdir("rawTest")[:300]
+    img_list=os.listdir("rawTest")[69:70]
+
+
     '''
     file = random.choice(os.listdir("rawTest"))
     img_path_raw = "rawTest/" + file
@@ -71,6 +73,7 @@ if __name__ == '__main__':
 
         #print(".......... EPISODE "+str(i)+" --------------")
         file=random.choice(img_list)
+
         img_path_raw = "rawTest/"+file
         print("img_path",img_path_raw)
         raw = cv2.imread(img_path_raw)

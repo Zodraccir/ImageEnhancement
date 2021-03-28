@@ -114,7 +114,18 @@ class ImageEnhancementEnv(gym.Env):
 		self.done=0
 		self.startImage = None
 
+		self.startImageRaw=None
+		self.finalImage = None
+		self.targetRaw = None
 
+
+	# print(self.type_distance,type_distance)
+
+	def doStepOriginal(self, actions):
+		temp = self.startImageRaw.detach().clone()
+		for a in actions:
+			temp = performAction(a, temp)
+		self.finalImage = temp.detach().clone()
 
 
 
@@ -174,11 +185,15 @@ class ImageEnhancementEnv(gym.Env):
 		expImage = transform(img_exp)
 
 		
-		self.target=expImage.detach().clone()
+
 
 		self.state=rawImage.detach().clone()
+		self.startImage = rawImage.detach().clone()
+		self.target = expImage.detach().clone()
 
-		self.startImage=rawImage.detach().clone()
+		self.startImageRaw=transform(raw).detach().clone()
+		self.targetRaw=transform(target).detach().clone()
+
 
 		self.initial_distance=calculateDistance(self.target,self.state)
 		
@@ -191,10 +206,10 @@ class ImageEnhancementEnv(gym.Env):
 		plt.show()
 
 	def multiRender(self):
-		imIn = np.transpose(self.startImage.numpy(), (1, 2, 0))
-		imOut = np.transpose(self.state.numpy(), (1, 2, 0))
-		imTarget = np.transpose(self.target.numpy(), (1, 2, 0))
-		imDiff = np.transpose((self.startImage - self.state).numpy(), (1, 2, 0))
+		imIn = np.transpose(self.startImageRaw.numpy(), (1, 2, 0))
+		imOut = np.transpose(self.finalImage.numpy(), (1, 2, 0))
+		imTarget = np.transpose(self.targetRaw.numpy(), (1, 2, 0))
+		imDiff = np.transpose((self.startImageRaw - self.finalImage).numpy(), (1, 2, 0))
 
 		fig = plt.figure(figsize=(4., 4.))
 		grid = ImageGrid(fig, 111,  # similar to subplot(111)
