@@ -57,7 +57,7 @@ if __name__ == '__main__':
     
     scores, eps_history, steps_array = [], [], []
 
-    img_list=os.listdir("rawTest")[69:70]
+    img_list=os.listdir("rawTest")
 
 
     '''
