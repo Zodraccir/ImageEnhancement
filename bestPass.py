@@ -7,6 +7,7 @@ import argparse
 import os
 import cv2
 import random
+import torch
 
 
 if __name__ == '__main__':
@@ -53,8 +54,12 @@ if __name__ == '__main__':
     print(agent.q_eval.device)
     
     scores, eps_history, steps_array = [], [], []
-    img_list=os.listdir("rawTest")[69:70]
+    img_list=os.listdir("rawTest")[16:17]
 
+    #img_list=os.listdir("rawTest")[24:25]
+
+    #img_list = os.listdir("rawTest")[22:23]
+    #img_list = os.listdir("rawTest")[21:22]
     for i in range(n_games):
         done = False
 
@@ -70,14 +75,16 @@ if __name__ == '__main__':
         observation = env.reset(raw,target)
 
         #print(".......... EPISODE "+str(i)+" --------------")
-        state_= observation.clone().to(agent.q_eval.device)
+        state_= observation.detach().clone().to(agent.q_eval.device)
         score = 0
         n_step=0
         final_distance=None
         actions_done =[]
         while not done:
-		
+
             action = agent.choose_best_action(state_.unsqueeze_(0))
+
+
             
             if(action==-1):
             	print("finito no positive action")
@@ -96,7 +103,7 @@ if __name__ == '__main__':
                 agent.store_transition(state_.cpu(), action,
                                      reward, observation_, int(done))
                 agent.learn()
-            state_ = observation_
+            state_ = observation_.detach().clone()
             n_steps += 1
             n_step +=1
             final_distance=info
@@ -105,6 +112,8 @@ if __name__ == '__main__':
 
         scores.append(score)
         steps_array.append(n_steps)
+        
+        print(actions_done)
         
         env.doStepOriginal(actions_done)
         

@@ -17,6 +17,7 @@ class DeepQNetwork(nn.Module):
 
         fc_input_dims = self.calculate_conv_output_dims(input_dims)
 
+        print(fc_input_dims)
         self.fc1 = nn.Linear(fc_input_dims, 512)
         self.fc2 = nn.Linear(512, n_actions)
 
@@ -28,9 +29,13 @@ class DeepQNetwork(nn.Module):
 
     def calculate_conv_output_dims(self, input_dims):
         state = T.zeros(1, *input_dims)
+        print(state.shape)
         dims = self.conv1(state)
+        print(dims.shape)
         dims = self.conv2(dims)
+        print(dims.shape)
         dims = self.conv3(dims)
+        print(dims.shape)
         return int(np.prod(dims.size()))
 
     def forward(self, state):

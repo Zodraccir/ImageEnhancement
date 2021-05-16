@@ -48,6 +48,23 @@ def calculateDistance(i1, i2):
 def performAction(action,img):
 	temp_state = img.unsqueeze_(0)
 
+	if (action == 0):
+		return Act.brightness(temp_state, 0.08).squeeze()
+
+	elif (action == 1):
+		return Act.brightness(temp_state, -0.08).squeeze()
+	elif (action == 2):
+		return Act.contrast(temp_state, 1.77).squeeze()
+	elif (action == 3):
+		return Act.contrast(temp_state, 0.42).squeeze()
+	elif (action == 4):
+		return Act.gamma_corr(temp_state, 1.35).squeeze()
+	elif (action == 5):
+		return Act.gamma_corr(temp_state, 0.78).squeeze()
+	else:
+		print(action)
+
+	'''
 	if (action < 6):
 		act = action
 		if (act < 3):
@@ -91,7 +108,7 @@ def performAction(action,img):
 		return Act.gamma_corr(temp_state, 0.78).squeeze()
 	else:
 		print(action)
-
+	'''
 	
 
 class ImageEnhancementEnv(gym.Env):
@@ -102,7 +119,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(24)
+		self.action_space = spaces.Discrete(6)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 
 
@@ -147,9 +164,9 @@ class ImageEnhancementEnv(gym.Env):
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>self.initial_distance+0.2*self.initial_distance:
+		if distance_state.item()>(self.initial_distance+0.2*self.initial_distance):
 			done=1
-			#print("Limite sforato")
+			print("Limite sforato")
 		if self.steps>50:
 			done=1
 			#print("Max operazioni effettuate")
@@ -157,7 +174,7 @@ class ImageEnhancementEnv(gym.Env):
 		#print(reward_state.item())
 		#print(reward)
 
-		return self.state.clone(), reward, done, distance_from_previus
+		return self.state.clone(), reward, done, distance_state
 
 
 	def reset(self,raw,target):

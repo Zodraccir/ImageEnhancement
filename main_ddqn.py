@@ -57,8 +57,7 @@ if __name__ == '__main__':
     
     scores, eps_history, steps_array = [], [], []
 
-    img_list=os.listdir("rawTest")
-
+    img_list = os.listdir("rawTest")[:100]
 
     '''
     file = random.choice(os.listdir("rawTest"))
@@ -68,6 +67,7 @@ if __name__ == '__main__':
     img_path_exp = "ExpTest/" + file
     target = cv2.imread(img_path_exp)
     '''
+
     for i in range(n_games):
         done = False
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         target = cv2.imread(img_path_exp)
 
         observation = env.reset(raw,target)
-        state_= observation.clone().to(agent.q_eval.device)
+        state_= observation.detach().clone().to(agent.q_eval.device)
         score = 0
         while not done:
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                 agent.store_transition(state_.cpu(), action,
                                      reward, observation_, int(done))
                 agent.learn()
-            state_ = observation_
+            state_ = observation_.detach().clone()
             n_steps += 1
             #if done:
             	#print("finito")

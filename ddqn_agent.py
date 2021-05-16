@@ -61,6 +61,10 @@ class DDQNAgent(object):
     
     def choose_best_action(self, observation):
         state = observation.clone().to(self.q_eval.device)
+
+        print("torch", T.mean(state))
+
+        
         actions = self.q_eval.forward(state)
         print(actions)
 
