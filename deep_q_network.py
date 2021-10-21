@@ -11,15 +11,22 @@ class DeepQNetwork(nn.Module):
         self.checkpoint_dir = chkpt_dir
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
 
-        self.conv1 = nn.Conv2d(input_dims[0], 32, 8, stride=4)
-        self.conv2 = nn.Conv2d(32, 64, 4, stride=2)
-        self.conv3 = nn.Conv2d(64, 64, 3, stride=1)
+        self.conv1 = nn.Conv2d(input_dims[0], 96, 11, stride=4, padding=0)
+        self.conv2 = nn.Conv2d(96, 256, 4, stride=1,padding=2)
+        self.conv3 = nn.Conv2d(256, 384, 3, stride=1,padding=1)
+        self.conv4 = nn.Conv2d(384, 384, 3, stride=1,padding=1)
+        self.conv5 = nn.Conv2d(384, 256, 3, stride=1,padding=1)
+
+        self.maxpool1 = nn.MaxPool2d(kernel_size=2)
+        self.maxpool2 = nn.MaxPool2d(kernel_size=2)
 
         fc_input_dims = self.calculate_conv_output_dims(input_dims)
 
         print(fc_input_dims)
-        self.fc1 = nn.Linear(fc_input_dims, 512)
-        self.fc2 = nn.Linear(512, n_actions)
+        self.fc1 = nn.Linear(fc_input_dims, 2048)
+        self.fc2 = nn.Linear(2048, 1024)
+        self.fc3 = nn.Linear(1024,512)
+        self.fc4 = nn.Linear(512, n_actions)
 
         self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
 
@@ -29,23 +36,36 @@ class DeepQNetwork(nn.Module):
 
     def calculate_conv_output_dims(self, input_dims):
         state = T.zeros(1, *input_dims)
-        print(state.shape)
+        print("1",state.shape)
         dims = self.conv1(state)
-        print(dims.shape)
+        print("2",dims.shape)
+        dims = self.maxpool1(dims)
+        print("2pool", dims.shape)
         dims = self.conv2(dims)
-        print(dims.shape)
+        print("3",dims.shape)
+        dims = self.maxpool2(dims)
+        print("3pool", dims.shape)
         dims = self.conv3(dims)
-        print(dims.shape)
+        print("4",dims.shape)
+        dims = self.conv4(dims)
+        print("5", dims.shape)
+        dims = self.conv5(dims)
+        print("6", dims.shape)
+        print(dims.view(dims.size()[0],-1).shape)
         return int(np.prod(dims.size()))
 
     def forward(self, state):
-        conv1 = F.relu(self.conv1(state))
-        conv2 = F.relu(self.conv2(conv1))
+        conv1 = self.maxpool1(F.relu(self.conv1(state)))
+        conv2 = self.maxpool2(F.relu(self.conv2(conv1)))
         conv3 = F.relu(self.conv3(conv2))
-        conv_state = conv3.view(conv3.size()[0], -1)
-
+        conv4 = F.relu(self.conv4(conv3))
+        conv5 = F.relu(self.conv5(conv4))
+        conv_state = conv5.view(conv5.size()[0], -1)
+        #print("conv",conv_state.shape)
         flat1 = F.relu(self.fc1(conv_state))
-        actions = self.fc2(flat1)
+        flat2 = F.relu(self.fc2(flat1))
+        flat3 = F.relu(self.fc3(flat2))
+        actions = self.fc4(flat3)
 
         return actions
 

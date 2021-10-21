@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="6864dd74-fb83-4648-bc34-073e8a96d291" name="Default Changelist" comment="" />
+    <list default="true" id="6864dd74-fb83-4648-bc34-073e8a96d291" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ddqn_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/ddqn_agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_q_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_q_network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_ddqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_ddqn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/image_enhancement-v0_DDQNAgent_q_eval" beforeDir="false" afterPath="$PROJECT_DIR$/models/image_enhancement-v0_DDQNAgent_q_eval" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/image_enhancement-v0_DDQNAgent_q_next" beforeDir="false" afterPath="$PROJECT_DIR$/models/image_enhancement-v0_DDQNAgent_q_next" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.0002_100games.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.0002_100games.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.0002_30games.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.0002_30games.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="main" />
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1lVEGohRJEIV0GUUGAFCtrFevIX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />

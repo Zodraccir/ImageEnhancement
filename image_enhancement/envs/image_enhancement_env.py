@@ -8,7 +8,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import torch
 from mpl_toolkits.axes_grid1 import ImageGrid
-
+import numpy as np
 
 
 
@@ -48,6 +48,9 @@ def calculateDistance(i1, i2):
 def performAction(action,img):
 	temp_state = img.unsqueeze_(0)
 
+	#print(temp_state.sum())
+
+	'''
 	if (action == 0):
 		return Act.brightness(temp_state, 0.08).squeeze()
 
@@ -108,7 +111,7 @@ def performAction(action,img):
 		return Act.gamma_corr(temp_state, 0.78).squeeze()
 	else:
 		print(action)
-	'''
+
 	
 
 class ImageEnhancementEnv(gym.Env):
@@ -119,7 +122,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(6)
+		self.action_space = spaces.Discrete(24)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 
 
@@ -164,15 +167,19 @@ class ImageEnhancementEnv(gym.Env):
 			done=1
 			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>(self.initial_distance+0.2*self.initial_distance):
+		if distance_state.item()>(self.initial_distance+0.4*self.initial_distance):
 			done=1
 			print("Limite sforato")
-		if self.steps>50:
+		if self.steps>25:
 			done=1
 			#print("Max operazioni effettuate")
 
 		#print(reward_state.item())
 		#print(reward)
+
+		#process reward, if
+
+		self.finalImage=self.state.clone()
 
 		return self.state.clone(), reward, done, distance_state
 
@@ -205,6 +212,8 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		self.state=rawImage.detach().clone()
+
+
 		self.startImage = rawImage.detach().clone()
 		self.target = expImage.detach().clone()
 

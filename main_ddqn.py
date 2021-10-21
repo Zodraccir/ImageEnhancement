@@ -35,12 +35,13 @@ if __name__ == '__main__':
     load_checkpoint = True
     learn_= True
     n_games = args.ngames
+
+
     
-    
-    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.0002,
+    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.00001,
                      input_dims=(env.observation_space.shape),
-                     n_actions=env.action_space.n, mem_size=10000, eps_min=0.05,
-                     batch_size=32, replace=250, eps_dec=args.epsdecay,
+                     n_actions=env.action_space.n, mem_size=50000, eps_min=0.05,
+                     batch_size=64, replace=500, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     
     scores, eps_history, steps_array = [], [], []
 
-    img_list = os.listdir("rawTest")[:100]
+    img_list = os.listdir("rawTest")[:1]
 
     '''
     file = random.choice(os.listdir("rawTest"))
@@ -83,9 +84,12 @@ if __name__ == '__main__':
         observation = env.reset(raw,target)
         state_= observation.detach().clone().to(agent.q_eval.device)
         score = 0
+
+        n_actions=0
+
         while not done:
 
-            action = agent.choose_action(state_.unsqueeze_(0))
+            action = agent.choose_action(state_.unsqueeze_(0),n_actions)
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
            
@@ -98,6 +102,11 @@ if __name__ == '__main__':
                                      reward, observation_, int(done))
                 agent.learn()
             state_ = observation_.detach().clone()
+
+            n_actions+=1
+            #print("action " , n_actions, state_.sum())
+
+
             n_steps += 1
             #if done:
             	#print("finito")
@@ -107,8 +116,11 @@ if __name__ == '__main__':
 
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
-             ' average score %.3f' % avg_score, 'best score %.3f' % best_score,
+             ' average score %.5f' % avg_score, 'best score %.5f' % best_score,
             'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps )
+
+        if(i>15):
+            env.multiRender()
 
         if avg_score > best_score:
             #if not load_checkpoint:
