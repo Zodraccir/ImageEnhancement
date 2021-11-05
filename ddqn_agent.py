@@ -61,17 +61,17 @@ class DDQNAgent(object):
             tmp1=T.max(actions)
         else:
             action = np.random.choice(self.action_space)
-        print(step,action,tmp,tmp1)
+        #print(step,action,tmp,tmp1)
         return action
     
     def choose_best_action(self, observation):
         state = observation.clone().to(self.q_eval.device)
 
-        print("torch", T.mean(state))
+        #print("torch", T.mean(state))
 
         
         actions = self.q_eval.forward(state)
-        print(actions)
+        #print(actions)
 
         # if(len(T.nonzero(T.max(actions,T.tensor([0.])))) < 1):
         # print("nein")
