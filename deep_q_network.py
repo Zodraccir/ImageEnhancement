@@ -6,6 +6,7 @@ import torch.optim as optim
 import numpy as np
 
 class DeepQNetwork(nn.Module):
+    '''
     def __init__(self, lr, n_actions, name, input_dims, chkpt_dir):
         super(DeepQNetwork, self).__init__()
         self.checkpoint_dir = chkpt_dir
@@ -106,7 +107,7 @@ class DeepQNetwork(nn.Module):
         actions = self.fc4(flat3)
 
         return actions
-'''
+
 
     def save_checkpoint(self):
         print('... saving checkpoint ...')
