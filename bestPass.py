@@ -54,7 +54,8 @@ if __name__ == '__main__':
     print(agent.q_eval.device)
     
     scores, eps_history, steps_array = [], [], []
-    img_list=os.listdir("rawTest")[16:17]
+
+    img_list = os.listdir("rawTest")[10:20]
 
     #img_list=os.listdir("rawTest")[24:25]
 
@@ -80,22 +81,37 @@ if __name__ == '__main__':
         n_step=0
         final_distance=None
         actions_done =[]
-        while not done:
+
+
+        noposact=0
+
+
+        prev_distance=10000
+        while not noposact:
 
             action = agent.choose_best_action(state_.unsqueeze_(0))
 
+            print("action selected :", action )
 
             
             if(action==-1):
-            	print("finito no positive action")
-            	break
+                noposact = 1
+                print("finito no positive action")
+                break
             
-            actions_done.append(action)
+
             
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
-           
-            
+
+            if (prev_distance < info):
+                noposact = 1
+                print("new reward ",info)
+                break
+
+            prev_distance = reward
+
+            print("distance from target ", info, reward)
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
 
@@ -107,6 +123,13 @@ if __name__ == '__main__':
             n_steps += 1
             n_step +=1
             final_distance=info
+
+            if n_step>10:
+                noposact=1
+
+            actions_done.append(action)
+
+
             #if done:
             	#print("finito")
 
@@ -114,7 +137,9 @@ if __name__ == '__main__':
         steps_array.append(n_steps)
         
         print(actions_done)
-        
+
+
+
         env.doStepOriginal(actions_done)
         
         avg_score = np.mean(scores[-100:])

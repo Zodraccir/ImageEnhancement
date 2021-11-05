@@ -138,6 +138,8 @@ class ImageEnhancementEnv(gym.Env):
 		self.finalImage = None
 		self.targetRaw = None
 
+		self.total_reward=0
+
 
 	# print(self.type_distance,type_distance)
 
@@ -160,8 +162,25 @@ class ImageEnhancementEnv(gym.Env):
 		threshold=0.00001
 
 
+
 		distance_from_previus=calculateDistance(self.previus_state,self.state)
 		done=0
+
+		if(reward>0):
+
+			splits=self.initial_distance/10
+
+			for i in range(1,10):
+				if(reward<i*splits):
+					reward=0.1*i
+					break
+
+			print(reward)
+
+		elif(reward<0):
+			reward=-1
+
+
 
 		if abs(distance_state.item())<threshold:
 			done=1
@@ -180,6 +199,13 @@ class ImageEnhancementEnv(gym.Env):
 		#process reward, if
 
 		self.finalImage=self.state.clone()
+
+
+		self.total_reward=self.total_reward+reward
+
+		if(reward<0):
+			print("passaggio sbagliato")
+			done=1
 
 		return self.state.clone(), reward, done, distance_state
 

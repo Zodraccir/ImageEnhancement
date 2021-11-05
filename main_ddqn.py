@@ -14,6 +14,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--ngames', '-n', help="a number of games", type=int, default=1000)
     parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
+    parser.add_argument('--startimage','-s', help="start index of image dataset",type=int,default=0)
+    parser.add_argument('--endimage','-k', help="start index of image dataset",type=int,default=0)
 
     #print(parser.format_help())
     # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
@@ -38,10 +40,10 @@ if __name__ == '__main__':
 
 
     
-    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=0.00001,
+    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=0.00001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=50000, eps_min=0.05,
-                     batch_size=64, replace=500, eps_dec=args.epsdecay,
+                     batch_size=128, replace=500, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
@@ -57,8 +59,10 @@ if __name__ == '__main__':
     print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games)
     
     scores, eps_history, steps_array = [], [], []
+    img_list = os.listdir("rawTest")
+    if(args.startimage>0):
+        img_list=img_list[args.startimage:args.endimage]
 
-    img_list = os.listdir("rawTest")[:1]
 
     '''
     file = random.choice(os.listdir("rawTest"))
@@ -119,8 +123,7 @@ if __name__ == '__main__':
              ' average score %.5f' % avg_score, 'best score %.5f' % best_score,
             'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps )
 
-        if(i>15):
-            env.multiRender()
+
 
         if avg_score > best_score:
             #if not load_checkpoint:

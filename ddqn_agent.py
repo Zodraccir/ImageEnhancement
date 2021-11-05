@@ -50,7 +50,7 @@ class DDQNAgent(object):
 
     def choose_action(self, observation, step):
         tmp=0
-        randm=0
+
         tmp1=0
         if np.random.random() > self.epsilon:
             state = observation.clone().to(self.q_eval.device)
@@ -60,13 +60,8 @@ class DDQNAgent(object):
             tmp=T.argmax(actions)
             tmp1=T.max(actions)
         else:
-            randm=1
-            p_a=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.16666666666,0.16666666666,0.16666666666,0.16666666666,0.16666666666,0.16666666666]
-            if(step<5):
-                action = np.random.choice(self.action_space,p=p_a)
-            else:
-                action = np.random.choice(self.action_space)
-        print(step,action,tmp,tmp1,randm)
+            action = np.random.choice(self.action_space)
+        print(step,action,tmp,tmp1)
         return action
     
     def choose_best_action(self, observation):
@@ -84,7 +79,7 @@ class DDQNAgent(object):
         posact = False
         for a in actions.detach().numpy()[0]:
             # print(a)
-            if (a > 0):
+            if (a > 0.1):
                 posact = True
         if (not posact):
             return -1
