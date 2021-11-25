@@ -40,10 +40,10 @@ if __name__ == '__main__':
 
 
     
-    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=0.00001,
+    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=0.0002,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=50000, eps_min=0.05,
-                     batch_size=128, replace=500, eps_dec=args.epsdecay,
+                     batch_size=256, replace=500, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
         score = 0
 
         n_actions=0
-
+        final_distance=0
         while not done:
 
             action = agent.choose_action(state_.unsqueeze_(0),n_actions)
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
             n_actions+=1
             #print("action " , n_actions, state_.sum())
-
+            final_distance = info
 
             n_steps += 1
             #if done:
@@ -121,7 +121,7 @@ if __name__ == '__main__':
         avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,'score: ', score,
              ' average score %.5f' % avg_score, 'best score %.5f' % best_score,
-            'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance , 'steps', n_steps )
+            'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance ,'final distance' ,final_distance, 'steps', n_steps )
 
 
 

@@ -79,9 +79,10 @@ class DDQNAgent(object):
         posact = False
         for a in actions.detach().numpy()[0]:
             # print(a)
-            if (a > 0.1):
+            if (a > 0):
                 posact = True
         if (not posact):
+            print(actions)
             return -1
         action = T.argmax(actions).item()
 

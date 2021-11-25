@@ -50,7 +50,7 @@ def performAction(action,img):
 
 	#print(temp_state.sum())
 
-	'''
+
 	if (action == 0):
 		return Act.brightness(temp_state, 0.08).squeeze()
 
@@ -111,7 +111,7 @@ def performAction(action,img):
 		return Act.gamma_corr(temp_state, 0.78).squeeze()
 	else:
 		print(action)
-
+	'''
 	
 
 class ImageEnhancementEnv(gym.Env):
@@ -122,7 +122,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(24)
+		self.action_space = spaces.Discrete(4)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 
 
