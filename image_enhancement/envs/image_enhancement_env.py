@@ -12,7 +12,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 class Act():
     def gamma_corr(image, gamma, channel=None):
-        mod = image.clone().to(device)
+        mod = image.clone()
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(mod[:, channel, :, :] ** gamma,0 ,1)
         else:
@@ -20,7 +20,7 @@ class Act():
         return mod
 
     def brightness(image, bright, channel=None):
-        mod = image.clone().to(device)
+        mod = image.clone()
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(mod[:, channel, :, :] + bright, 0, 1)
         else:
@@ -29,7 +29,7 @@ class Act():
         return mod
 
     def contrast(image, alpha, channel=None):
-        mod = image.clone().to(device)
+        mod = image.clone()
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(
                 torch.mean(mod[:, channel, :, :]) + alpha * (mod[:, channel, :, :] - torch.mean(mod[:, channel, :, :])),
@@ -142,16 +142,16 @@ class ImageEnhancementEnv(gym.Env):
 	# print(self.type_distance,type_distance)
 
 	def doStepOriginal(self, actions):
-		temp = self.startImageRaw.detach().clone().to(device)
+		temp = self.startImageRaw.detach().clone()
 		for a in actions:
 			temp = performAction(a, temp)
-		self.finalImage = temp.detach().clone().to(device)
+		self.finalImage = temp.detach().clone()
 
 
 
 	def step(self, action):
 		assert self.action_space.contains(action)
-		self.previus_state=self.state.detach().clone().to(device)
+		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		self.state=performAction(action,self.state)
 		distance_state = calculateDistance(self.target,self.state)
@@ -196,7 +196,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		#process reward, if
 
-		self.finalImage=self.state.clone().to(device)
+		self.finalImage=self.state.clone()
 
 
 		self.total_reward=self.total_reward+reward
@@ -205,7 +205,7 @@ class ImageEnhancementEnv(gym.Env):
 			#print("passaggio sbagliato")
 			done=1
 
-		return self.state.clone().to(device), reward, done, distance_state
+		return self.state.clone(), reward, done, distance_state
 
 
 	def reset(self,raw,target):
@@ -235,14 +235,14 @@ class ImageEnhancementEnv(gym.Env):
 		
 
 
-		self.state=rawImage.detach().clone().to(device)
+		self.state=rawImage.detach().clone()
 
 
-		self.startImage = rawImage.detach().clone().to(device)
-		self.target = expImage.detach().clone().to(device)
+		self.startImage = rawImage.detach().clone()
+		self.target = expImage.detach().clone()
 
-		self.startImageRaw=transform(raw).detach().clone().to(device)
-		self.targetRaw=transform(target).detach().clone().to(device)
+		self.startImageRaw=transform(raw).detach().clone()
+		self.targetRaw=transform(target).detach().clone()
 
 
 		self.initial_distance=calculateDistance(self.target,self.state)
