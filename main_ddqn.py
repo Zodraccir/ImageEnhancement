@@ -100,10 +100,10 @@ if __name__ == '__main__':
             score += reward
 
             if learn_:
-                agent.store_transition(state_.to(agent.q_eval.device), action,
+                agent.store_transition(state_.cpu(), action,
                                      reward, observation_, int(done))
                 agent.learn()
-            state_ = observation_.detach().clone().to(agent.q_eval.device)
+            state_ = observation_.detach().clone()
 
             n_actions+=1
             #print("action " , n_actions, state_.sum())
