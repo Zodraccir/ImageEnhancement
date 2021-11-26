@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     n_steps = 0
     
-    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games)
+    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'number action ',agent.n_actions)
 
 
     scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
