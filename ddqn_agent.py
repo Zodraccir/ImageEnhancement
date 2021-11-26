@@ -3,7 +3,21 @@ import torch as T
 from deep_q_network import DeepQNetwork
 from replay_memory import ReplayBuffer
 
+
+def count_parameters(model):
+    total_param = 0
+    for name, param in model.named_parameters():
+        if param.requires_grad:
+            num_param = np.prod(param.size())
+            if param.dim() > 1:
+                print(name, ':', 'x'.join(str(x) for x in list(param.size())), '=', num_param)
+            else:
+                print(name, ':', num_param)
+            total_param += num_param
+    return total_param
+
 class DDQNAgent(object):
+
     def __init__(self, gamma, epsilon, lr, n_actions, input_dims,
                  mem_size, batch_size, eps_min=0.01, eps_dec=5e-7,
                  replace=256, algo=None, env_name=None, chkpt_dir='tmp/dqn'):
@@ -33,8 +47,11 @@ class DDQNAgent(object):
                                     name=self.env_name+'_'+self.algo+'_q_next',
                                     chkpt_dir=self.chkpt_dir)
 
+
     def store_transition(self, state, action, reward, state_, done):
         self.memory.store_transition(state, action, reward, state_, done)
+
+
 
     def sample_memory(self):
         state, action, reward, new_state, done = \
@@ -48,20 +65,16 @@ class DDQNAgent(object):
 
         return states, actions, rewards, states_, dones
 
-    def choose_action(self, observation, step):
-        tmp=0
-
-        tmp1=0
+    def choose_action(self, observation):
         if np.random.random() > self.epsilon:
             state = observation.clone().to(self.q_eval.device)
             actions = self.q_eval.forward(state)
-            #print(actions)
+
             action = T.argmax(actions).item()
-            tmp=T.argmax(actions)
-            tmp1=T.max(actions)
+
         else:
             action = np.random.choice(self.action_space)
-        #print(step,action,tmp,tmp1)
+
         return action
     
     def choose_best_action(self, observation):

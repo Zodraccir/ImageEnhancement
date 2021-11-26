@@ -50,15 +50,12 @@ if __name__ == '__main__':
     if load_checkpoint:
         agent.load_models(learn_)
 
-    fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) +'_' \
-            + str(n_games) + 'games'
-    figure_file = 'plots/' + fname + '.png'
-
     n_steps = 0
     
     print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games)
-    
-    scores, eps_history, steps_array = [], [], []
+
+
+    scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
     img_list = os.listdir("rawTest")
     if(args.startimage>0):
         img_list=img_list[args.startimage:args.endimage]
@@ -90,10 +87,11 @@ if __name__ == '__main__':
         score = 0
 
         n_actions=0
-        final_distance=0
+        final_distance=env.initial_distance
+        initial_distance=env.initial_distance
         while not done:
 
-            action = agent.choose_action(state_.unsqueeze_(0),n_actions)
+            action = agent.choose_action(state_.unsqueeze_(0))
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
            
@@ -105,38 +103,46 @@ if __name__ == '__main__':
                 agent.store_transition(state_.cpu(), action,
                                      reward, observation_, int(done))
                 agent.learn()
-            state_ = observation_.detach().clone()
+            state_ = observation_.detach().clone().to(agent.q_eval.device)
 
             n_actions+=1
             #print("action " , n_actions, state_.sum())
-            final_distance = info
+
 
             n_steps += 1
-            #if done:
-            	#print("finito")
+            if not done:
+            	final_distance = info
+
 
         scores.append(score)  
         steps_array.append(n_steps)
 
-        avg_score = np.mean(scores[-100:])
-        print('episode: ', i+1,'/',n_games,'score: ', score,
-             ' average score %.5f' % avg_score, 'best score %.5f' % best_score,
+        score_perc=(1-(final_distance/initial_distance))*100
+
+        numbers_actions.append(numbers_actions)
+
+        scores_perc.append(score_perc)
+
+        #avg_score = np.mean(scores[-100:])
+        print('episode: ', i+1,'/',n_games,'score: %.1f' % score,
+             ' percent score %.5f' % score_perc, ' number of actions ', n_actions,
             'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance ,'final distance' ,final_distance, 'steps', n_steps )
-
-
-
-        if avg_score > best_score:
-            #if not load_checkpoint:
-            #    agent.save_models()
-            best_score = avg_score
 
 
         eps_history.append(agent.epsilon)
         #if load_checkpoint and n_steps >= 18000:
             #break
 
-    x = [i+1 for i in range(len(scores))]
-    plot_learning_curve(steps_array, scores, eps_history, figure_file)
-    
     if load_checkpoint:
     	agent.save_models()
+
+    fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) + '_' \
+            + str(n_games) + 'games'
+    figure_file = 'plots/' + fname + '.png'
+    figure_file1= 'plots_custom/' + fname + '.png'
+
+    x = [i+1 for i in range(len(scores))]
+    plot_learning_curve(steps_array, scores, eps_history, figure_file)
+    #plot_learning_curve(steps_array, scores_perc, numbers_actions, figure_file1)
+    
+

@@ -1,7 +1,5 @@
 import gym
 from gym import error, spaces, utils
-from gym.utils import seeding
-import numpy as np
 import torchvision.transforms as T
 import cv2
 import matplotlib
@@ -10,11 +8,11 @@ import torch
 from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
 
-
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 class Act():
     def gamma_corr(image, gamma, channel=None):
-        mod = image.clone()
+        mod = image.clone().to(device)
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(mod[:, channel, :, :] ** gamma,0 ,1)
         else:
@@ -22,7 +20,7 @@ class Act():
         return mod
 
     def brightness(image, bright, channel=None):
-        mod = image.clone()
+        mod = image.clone().to(device)
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(mod[:, channel, :, :] + bright, 0, 1)
         else:
@@ -31,7 +29,7 @@ class Act():
         return mod
 
     def contrast(image, alpha, channel=None):
-        mod = image.clone()
+        mod = image.clone().to(device)
         if channel is not None:
             mod[:, channel, :, :] = torch.clamp(
                 torch.mean(mod[:, channel, :, :]) + alpha * (mod[:, channel, :, :] - torch.mean(mod[:, channel, :, :])),
@@ -122,7 +120,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(4)
+		self.action_space = spaces.Discrete(6)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 
 
@@ -144,16 +142,16 @@ class ImageEnhancementEnv(gym.Env):
 	# print(self.type_distance,type_distance)
 
 	def doStepOriginal(self, actions):
-		temp = self.startImageRaw.detach().clone()
+		temp = self.startImageRaw.detach().clone().to(device)
 		for a in actions:
 			temp = performAction(a, temp)
-		self.finalImage = temp.detach().clone()
+		self.finalImage = temp.detach().clone().to(device)
 
 
 
 	def step(self, action):
 		assert self.action_space.contains(action)
-		self.previus_state=self.state.detach().clone()
+		self.previus_state=self.state.detach().clone().to(device)
 		self.steps+=1
 		self.state=performAction(action,self.state)
 		distance_state = calculateDistance(self.target,self.state)
@@ -175,7 +173,7 @@ class ImageEnhancementEnv(gym.Env):
 					reward=0.1*i
 					break
 
-			print(reward)
+			#print(reward)
 
 		elif(reward<0):
 			reward=-1
@@ -183,12 +181,12 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		if abs(distance_state.item())<threshold:
-			done=1
+			done=10
 			print("Passsaggi effettuati correttamente")
 
 		if distance_state.item()>(self.initial_distance+0.4*self.initial_distance):
 			done=1
-			print("Limite sforato")
+			#print("Limite sforato")
 		if self.steps>25:
 			done=1
 			#print("Max operazioni effettuate")
@@ -198,16 +196,16 @@ class ImageEnhancementEnv(gym.Env):
 
 		#process reward, if
 
-		self.finalImage=self.state.clone()
+		self.finalImage=self.state.clone().to(device)
 
 
 		self.total_reward=self.total_reward+reward
 
-		if(reward<0):
-			print("passaggio sbagliato")
+		if(reward<-0.5):
+			#print("passaggio sbagliato")
 			done=1
 
-		return self.state.clone(), reward, done, distance_state
+		return self.state.clone().to(device), reward, done, distance_state
 
 
 	def reset(self,raw,target):
@@ -237,14 +235,14 @@ class ImageEnhancementEnv(gym.Env):
 		
 
 
-		self.state=rawImage.detach().clone()
+		self.state=rawImage.detach().clone().to(device)
 
 
-		self.startImage = rawImage.detach().clone()
-		self.target = expImage.detach().clone()
+		self.startImage = rawImage.detach().clone().to(device)
+		self.target = expImage.detach().clone().to(device)
 
-		self.startImageRaw=transform(raw).detach().clone()
-		self.targetRaw=transform(target).detach().clone()
+		self.startImageRaw=transform(raw).detach().clone().to(device)
+		self.targetRaw=transform(target).detach().clone().to(device)
 
 
 		self.initial_distance=calculateDistance(self.target,self.state)
