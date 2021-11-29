@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
 
     scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
-    img_list = os.listdir("rawTest")
+    img_list = os.listdir("rawTraining")
     if(args.startimage>0):
         img_list=img_list[args.startimage:args.endimage]
 
@@ -76,10 +76,10 @@ if __name__ == '__main__':
         #print(".......... EPISODE "+str(i)+" --------------")
         file=random.choice(img_list)
 
-        img_path_raw = "rawTest/"+file
+        img_path_raw = "rawTraining/"+file
         print("img_path",img_path_raw)
         raw = cv2.imread(img_path_raw)
-        img_path_exp = "ExpTest/"+file
+        img_path_exp = "newExpTest/"+file
         target = cv2.imread(img_path_exp)
 
         observation = env.reset(raw,target)
