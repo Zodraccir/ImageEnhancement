@@ -41,7 +41,8 @@ class Act():
 def calculateDistance(i1, i2):
 	return torch.mean((i1 - i2) ** 2)
 
-
+def euclideanDistance(i1,i2):
+	return torch.dist(i1, i2, 2)
 
 def performAction(action,img):
 	temp_state = img.unsqueeze_(0)
@@ -137,7 +138,11 @@ class ImageEnhancementEnv(gym.Env):
 		self.targetRaw = None
 
 		self.total_reward=0
+		self.initial_distance_RAW=None
+		self.final_distance_RAW=None
 
+		self.target_image_RAW_batched=None
+		self.final_image_RAW_batched=None
 
 	# print(self.type_distance,type_distance)
 
@@ -147,6 +152,8 @@ class ImageEnhancementEnv(gym.Env):
 			temp = performAction(a, temp)
 		self.finalImage = temp.detach().clone()
 
+		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)
+		self.final_image_RAW_batched = self.finalImage.detach().clone().unsqueeze(0)
 
 
 	def step(self, action):
@@ -247,7 +254,10 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.initial_distance=calculateDistance(self.target,self.state)
 		
-		
+		self.initial_distance_RAW=euclideanDistance(self.startImageRaw,self.targetRaw)
+
+		self.target_image_RAW_batched=self.targetRaw.detach().clone().unsqueeze(0)
+
 		return self.state
 
 	def render(self):

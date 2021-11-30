@@ -39,8 +39,8 @@ if __name__ == '__main__':
     n_games = args.ngames
 
 
-    
-    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=0.0002,
+    #lr=0002 RMSprop
+    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=0.001,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=50000, eps_min=0.05,
                      batch_size=256, replace=500, eps_dec=args.epsdecay,
