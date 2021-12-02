@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     print(agent.q_eval.device)
 
-    scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances = [], [], [], [], [], [] , []
+    scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances , score_psnr , score_ssim =  [], [], [], [], [], [] , [] , [] , []
 
     img_list = os.listdir("testSet")
 
@@ -151,9 +151,21 @@ if __name__ == '__main__':
 
 
         env.doStepOriginal(actions_done)
-        print(losses.ssim_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,1))
-        print(losses.psnr_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,2.))
+
+
         final_distance_raw=env.final_distance_RAW
+
+
+        #print("ssim", -1+2*(losses.ssim_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,11)))
+
+
+
+        #print("psnr ",-losses.psnr_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,1))
+
+
+
+        score_psnr.append(-losses.psnr_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,1))
+        score_ssim.append(-(-1+2*(losses.ssim_loss(env.final_image_RAW_batched,env.target_image_RAW_batched,11))))
 
         #print(initial_distance_raw,final_distance_raw,(1 - (final_distance_raw / initial_distance_raw)) * 100)
 
@@ -182,5 +194,7 @@ if __name__ == '__main__':
     avg_score=np.mean(scores)
     avg_percent_raw=np.mean(scores_perc_raw)
     avg_distances=np.mean(distances)
+    avg_score_psnr=np.mean(score_psnr)
+    avg_score_ssim=np.mean(score_ssim)
 
-    print('perc ',avg_percent,'scores ',avg_score,'percraws ' ,avg_percent_raw,' distances',avg_distances)
+    print('perc ',avg_percent,'scores ',avg_score,'percraws ' ,avg_percent_raw,' distances',avg_distances, ' psnr',avg_score_psnr,' ssim',avg_score_ssim)
