@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6864dd74-fb83-4648-bc34-073e8a96d291" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bestPass.py" beforeDir="false" afterPath="$PROJECT_DIR$/bestPass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.001_100games.png" beforeDir="false" afterPath="$PROJECT_DIR$/plots/DDQNAgent_image_enhancement-v0_lr0.001_100games.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_enhancement/envs/actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_enhancement/envs/actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_ddqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_ddqn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,5 +76,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/image_enhancement/envs/image_enhancement_env.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

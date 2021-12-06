@@ -8,6 +8,8 @@ import torch
 from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
 
+from image_enhancement.envs.actions import select, select_fine
+
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 class Act():
@@ -160,7 +162,8 @@ class ImageEnhancementEnv(gym.Env):
 		assert self.action_space.contains(action)
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
-		self.state=performAction(action,self.state)
+		#self.state=performAction(action,self.state)
+		self.state=select(self.state,action)
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state
