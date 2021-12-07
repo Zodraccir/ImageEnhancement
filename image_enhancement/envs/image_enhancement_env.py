@@ -221,6 +221,11 @@ class ImageEnhancementEnv(gym.Env):
 	def reset(self,raw,target):
 		self.done=0
 
+
+		print(raw.shape)
+
+		print(targe.max())
+
 		transform = T.Compose([T.ToTensor()])
 
 		self.steps=0
