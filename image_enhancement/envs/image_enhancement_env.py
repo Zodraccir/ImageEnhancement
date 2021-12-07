@@ -224,7 +224,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		print(raw.shape)
 
-		print(targe.max())
+		print(target.max())
 
 		transform = T.Compose([T.ToTensor()])
 

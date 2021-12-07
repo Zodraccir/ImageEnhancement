@@ -6,7 +6,7 @@ from utils import plot_learning_curve, make_env
 import sys
 import argparse
 import random,os,cv2
-
+import inspect
 
 
 if __name__ == '__main__':
@@ -83,6 +83,7 @@ if __name__ == '__main__':
         target = cv2.imread(img_path_exp)
 
 
+        print(inspect.signature(env.reset))
 
         observation = env.reset(raw,target)
         state_= observation.detach().clone().to(agent.q_eval.device)
