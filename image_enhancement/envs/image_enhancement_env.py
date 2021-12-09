@@ -221,11 +221,6 @@ class ImageEnhancementEnv(gym.Env):
 	def reset(self,raw,target):
 		self.done=0
 
-
-		print(raw.shape)
-
-		print(target.max())
-
 		transform = T.Compose([T.ToTensor()])
 
 		self.steps=0
@@ -239,6 +234,7 @@ class ImageEnhancementEnv(gym.Env):
 		img_raw = cv2.resize(raw, (64, 64), interpolation = cv2.INTER_AREA)
 
 		rawImage = transform(img_raw)
+
 
 		#img_path_exp = "ExpTest/"+file
 

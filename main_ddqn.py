@@ -83,10 +83,6 @@ if __name__ == '__main__':
         img_path_exp = "ExpC/"+file
         target = cv2.imread(img_path_exp)
 
-
-        print(inspect.signature(env.reset))
-        print(inspect.getfile(env.reset))
-
         observation = env.reset(raw,target)
         state_= observation.detach().clone().to(agent.q_eval.device)
         score = 0
