@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances , score_psnr , score_ssim =  [], [], [], [], [], [] , [] , [] , []
 
-    img_list = os.listdir("testSet")
+    img_list = os.listdir("RawTest")
 
     #img_list=os.listdir("rawTest")[24:25]
 
@@ -67,10 +67,10 @@ if __name__ == '__main__':
 
         #print(".......... EPISODE "+str(i)+" --------------")
         file=i
-        img_path_raw = "testSet/"+file
+        img_path_raw = "RawTest/"+file
         print("img_path",img_path_raw)
         raw = cv2.imread(img_path_raw)
-        img_path_exp = "newExpTest/"+file
+        img_path_exp = "ExpC/"+file
         target = cv2.imread(img_path_exp)
 
         observation = env.reset(raw,target)
@@ -176,7 +176,7 @@ if __name__ == '__main__':
 
         avg_score = np.mean(scores[-100:])
         print('episode: ', i,'score: ', score ,'score_per',score_perc, ' score_perc_raw', score_perc_raw , ' step' , n_step, 'initial distance raw', env.initial_distance_RAW, ' final distance raw', final_distance_raw ,'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
-        #env.multiRender()
+        env.multiRender()
         if avg_score > best_score:
             #if not load_checkpoint:
             #    agent.save_models()

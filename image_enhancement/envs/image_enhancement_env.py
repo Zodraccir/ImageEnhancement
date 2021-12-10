@@ -123,7 +123,7 @@ class ImageEnhancementEnv(gym.Env):
 	def __init__(self):
 
 		#da capire come parametrizzare
-		self.action_space = spaces.Discrete(24)
+		self.action_space = spaces.Discrete(28)
 		self.observation_space = spaces.Box(0, 255, [3, 64, 64])
 
 
@@ -151,7 +151,7 @@ class ImageEnhancementEnv(gym.Env):
 	def doStepOriginal(self, actions):
 		temp = self.startImageRaw.detach().clone()
 		for a in actions:
-			temp = performAction(a, temp)
+			temp = select(temp, a)
 		self.finalImage = temp.detach().clone()
 
 		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)

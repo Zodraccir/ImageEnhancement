@@ -3,6 +3,7 @@ import torch.utils
 import torch.utils.data
 #from ColorAlgorithms import saturation, hue
 import torch
+import torchvisionrik9
 
 
 
@@ -57,13 +58,13 @@ def select(img, act):
     elif act == 23:
         return contrast(img, 2).squeeze()
     elif act == 24:
-        return saturation(img, 0.5).squeeze()
+        return torchvision.transforms.functional.adjust_saturation(img, 0.707).squeeze()
     elif act == 25:
-        return saturation(img, 2).squeeze()
+        return torchvision.transforms.functional.adjust_saturation(img, 1.414).squeeze()
     elif act == 26:
-        return hue(img, 0.05).squeeze()
+        return torchvision.transforms.functional.adjust_hue(img, 0.025).squeeze()
     elif act == 27:
-        return hue(img, -0.05).squeeze()
+        return torchvision.transforms.functional.adjust_hue(img, -0.025).squeeze()
     elif act == 28:
         return img
 
