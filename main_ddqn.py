@@ -1,6 +1,4 @@
 import argparse
-import cv2
-import inspect
 import os
 import random
 import image_enhancement
@@ -9,6 +7,14 @@ import numpy as np
 
 from ddqn_agent import DDQNAgent
 from utils import plot_learning_curve
+
+from torchvision import transforms
+from PIL import Image
+
+path_training_image="RawTraining/"
+path_expert_image="ExpC/"
+path_test_image="RawTest/"
+
 
 if __name__ == '__main__':
 
@@ -57,7 +63,7 @@ if __name__ == '__main__':
 
 
     scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
-    img_list = os.listdir("RawTraining")
+    img_list = os.listdir(path_training_image)
     if(args.startimage>0):
         img_list=img_list[args.startimage:args.endimage]
 
@@ -70,6 +76,7 @@ if __name__ == '__main__':
     img_path_exp = "ExpTest/" + file
     target = cv2.imread(img_path_exp)
     '''
+    convert_tensor = transforms.ToTensor()
 
     for i in range(n_games):
         done = False
@@ -77,11 +84,11 @@ if __name__ == '__main__':
         #print(".......... EPISODE "+str(i)+" --------------")
         file=random.choice(img_list)
 
-        img_path_raw = "RawTraining/"+file
-        print("img_path",img_path_raw)
-        raw = cv2.imread(img_path_raw)
-        img_path_exp = "ExpC/"+file
-        target = cv2.imread(img_path_exp)
+        img_path_raw = Image.open(path_training_image+file)
+        img_path_exp = Image.open(path_expert_image+file)
+
+        raw=convert_tensor(img_path_raw)
+        target=convert_tensor(img_path_exp)
 
         observation = env.reset(raw,target)
         state_= observation.detach().clone().to(agent.q_eval.device)
@@ -115,22 +122,24 @@ if __name__ == '__main__':
             	final_distance = info
 
 
-        scores.append(score)  
-        steps_array.append(n_steps)
+
+
 
         score_perc=(1-(final_distance/initial_distance))*100
 
+        steps_array.append(n_steps)
         numbers_actions.append(numbers_actions)
-
+        scores.append(score)
         scores_perc.append(score_perc)
+        eps_history.append(agent.epsilon)
 
         #avg_score = np.mean(scores[-100:])
-        print('episode: ', i+1,'/',n_games,'score: %.1f' % score,
+        print('episode: ', i+1,'/',n_games,' Image:', file ,'score: %.1f' % score,
              ' percent score %.5f' % score_perc, ' number of actions ', n_actions,
             'epsilon %.2f' % agent.epsilon, 'initial distance', env.initial_distance ,'final distance' ,final_distance, 'steps', n_steps )
 
 
-        eps_history.append(agent.epsilon)
+
         #if load_checkpoint and n_steps >= 18000:
             #break
 
@@ -142,8 +151,9 @@ if __name__ == '__main__':
     figure_file = 'plots/' + fname + '.png'
     figure_file1= 'plots_custom/' + fname + '.png'
 
-    x = [i+1 for i in range(len(scores))]
+    #x = [i+1 for i in range(len(scores))]
+
     plot_learning_curve(steps_array, scores, eps_history, figure_file)
-    #plot_learning_curve(steps_array, scores_perc, numbers_actions, figure_file1)
+
     
 

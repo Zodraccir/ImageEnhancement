@@ -5,10 +5,15 @@ import image_enhancement
 from utils import plot_learning_curve, make_env
 import argparse
 import os
-import cv2
+
 import random
-import torch
 import kornia.losses as losses
+from PIL import Image
+from torchvision import transforms
+
+path_training_image="RawTraining/"
+path_expert_image="ExpC/"
+path_test_image="RawTest/"
 
 if __name__ == '__main__':
 
@@ -55,25 +60,29 @@ if __name__ == '__main__':
 
     scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances , score_psnr , score_ssim =  [], [], [], [], [], [] , [] , [] , []
 
-    img_list = os.listdir("RawTest")
+    img_list = os.listdir(path_test_image)
 
     #img_list=os.listdir("rawTest")[24:25]
 
     #img_list = os.listdir("rawTest")[22:23]
     #img_list = os.listdir("rawTest")[21:22]
+
+    convert_tensor = transforms.ToTensor()
     for i in img_list:
         done = False
 
 
-        #print(".......... EPISODE "+str(i)+" --------------")
-        file=i
-        img_path_raw = "RawTest/"+file
-        print("img_path",img_path_raw)
-        raw = cv2.imread(img_path_raw)
-        img_path_exp = "ExpC/"+file
-        target = cv2.imread(img_path_exp)
+        file = random.choice(img_list)
 
-        observation = env.reset(raw,target)
+        img_path_raw = Image.open(path_test_image + file)
+        img_path_exp = Image.open(path_expert_image + file)
+
+        raw = convert_tensor(img_path_raw)
+        target = convert_tensor(img_path_exp)
+
+        observation = env.reset(raw, target)
+
+
 
         #print(".......... EPISODE "+str(i)+" --------------")
         state_= observation.detach().clone().to(agent.q_eval.device)
@@ -175,7 +184,7 @@ if __name__ == '__main__':
         distances.append(final_distance_raw)
 
         avg_score = np.mean(scores[-100:])
-        print('episode: ', i,'score: ', score ,'score_per',score_perc, ' score_perc_raw', score_perc_raw , ' step' , n_step, 'initial distance raw', env.initial_distance_RAW, ' final distance raw', final_distance_raw ,'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
+        print('episode: ', i,' Image: ',file,'score: ', score ,'score_per',score_perc, ' score_perc_raw', score_perc_raw , ' step' , n_step, 'initial distance raw', env.initial_distance_RAW, ' final distance raw', final_distance_raw ,'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
         env.multiRender()
         if avg_score > best_score:
             #if not load_checkpoint:
