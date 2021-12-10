@@ -1,5 +1,7 @@
 .idea
 models/image*
+image_enhancement/__pycache__
+plots/DDQN*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

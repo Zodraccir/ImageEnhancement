@@ -58,7 +58,7 @@ class ImageEnhancementEnv(gym.Env):
 	def doStepOriginal(self, actions):
 		temp = self.startImageRaw.detach().clone()
 		for a in actions:
-			temp = select(temp, a)
+			temp = select_fine(temp, a)
 		self.finalImage = temp.detach().clone()
 
 		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)
@@ -70,7 +70,7 @@ class ImageEnhancementEnv(gym.Env):
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		#self.state=performAction(action,self.state)
-		self.state=select(self.state,action)
+		self.state=select_fine(self.state,action)
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state

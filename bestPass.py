@@ -185,7 +185,7 @@ if __name__ == '__main__':
 
         avg_score = np.mean(scores[-100:])
         print('episode: ', i,' Image: ',file,'score: ', score ,'score_per',score_perc, ' score_perc_raw', score_perc_raw , ' step' , n_step, 'initial distance raw', env.initial_distance_RAW, ' final distance raw', final_distance_raw ,'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
-        env.multiRender()
+        #env.multiRender()
         if avg_score > best_score:
             #if not load_checkpoint:
             #    agent.save_models()
