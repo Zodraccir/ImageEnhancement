@@ -68,11 +68,11 @@ if __name__ == '__main__':
     #img_list = os.listdir("rawTest")[21:22]
 
     convert_tensor = transforms.ToTensor()
-    for i in img_list:
+    for i  in img_list:
         done = False
 
 
-        file = random.choice(img_list)
+        file = i
 
         img_path_raw = Image.open(path_test_image + file)
         img_path_exp = Image.open(path_expert_image + file)
