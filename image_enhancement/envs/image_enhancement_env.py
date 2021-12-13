@@ -81,7 +81,7 @@ class ImageEnhancementEnv(gym.Env):
 
 		if(reward>0):
 
-			splits=self.initial_distance/10
+			splits=distance_previus_state/10
 
 			for i in range(1,10):
 				if(reward<i*splits):
