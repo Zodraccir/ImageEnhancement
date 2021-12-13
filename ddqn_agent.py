@@ -90,7 +90,7 @@ class DDQNAgent(object):
         # print("nein")
         # return -1
         posact = False
-        for a in actions.detach().numpy()[0]:
+        for a in actions.cpu().detach().numpy()[0]:
             # print(a)
             if (a > -0.9):
                 posact = True
