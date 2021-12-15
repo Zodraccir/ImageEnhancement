@@ -8,7 +8,7 @@ import torch
 from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
 
-
+from torchvision.utils import save_image
 
 from image_enhancement.envs.actions import select, select_fine
 
@@ -58,7 +58,7 @@ class ImageEnhancementEnv(gym.Env):
 	def doStepOriginal(self, actions):
 		temp = self.startImageRaw.detach().clone()
 		for a in actions:
-			temp = select_fine(temp, a)
+			temp = select(temp, a)
 		self.finalImage = temp.detach().clone()
 
 		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)
@@ -70,7 +70,7 @@ class ImageEnhancementEnv(gym.Env):
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		#self.state=performAction(action,self.state)
-		self.state=select_fine(self.state,action)
+		self.state=select(self.state,action)
 		distance_state = calculateDistance(self.target,self.state)
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
 		reward = distance_previus_state-distance_state
@@ -172,6 +172,7 @@ class ImageEnhancementEnv(gym.Env):
 	# fig.show()
 	def save(self,name):
 		#print(self.state)
-		rdner = np.transpose(self.state.numpy(), (1, 2, 0))
-		matplotlib.image.imsave(name+'.png', (cv2.cvtColor(rdner, cv2.COLOR_BGR2RGB)))
+		#rdner = np.transpose(self.state.numpy(), (1, 2, 0))
+		#matplotlib.image.imsave(name+'.png', (cv2.cvtColor(rdner, cv2.COLOR_BGR2RGB)))
 		#cv2.imwrite("final.png",cv2.cvtColor(self.state, cv2.COLOR_BGR2RGB))
+		save_image(self.finalImage, "FinalImage/" + name)

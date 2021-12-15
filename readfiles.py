@@ -1,6 +1,7 @@
 import torch
 
 from torchvision import transforms
+from torchvision.utils import save_image
 
 import matplotlib.pyplot as plt
 
@@ -69,6 +70,10 @@ for i in img_list:
     diff_mean=tensor_img_resize.mean()-rawImage.mean()
     diff_summs.append(diff_sum)
     diff_means.append(diff_mean)
+
+    save_image(tensor_img,"FinalImage/"+i)
+
+    break
 
 print(np.mean(diff_summs))
 print(np.mean(diff_means))
