@@ -67,6 +67,8 @@ if __name__ == '__main__':
     #img_list = os.listdir("rawTest")[22:23]
     #img_list = os.listdir("rawTest")[21:22]
 
+    stats_actions=[0]*env.action_space.n
+
     convert_tensor = transforms.ToTensor()
     for i  in img_list:
         done = False
@@ -141,7 +143,7 @@ if __name__ == '__main__':
                 noposact=1
 
             actions_done.append(action)
-
+            stats_actions[action]=stats_actions[action]+1
 
             #if done:
             	#print("finito")
@@ -207,4 +209,14 @@ if __name__ == '__main__':
     avg_score_psnr=np.mean(score_psnr)
     avg_score_ssim=np.mean(score_ssim)
 
+    for idx, val in enumerate(stats_actions):
+        print(idx, val)
+
+    print('argmax score',img_list[np.array(scores).argmax()])
+    print('argmax scoreeperc', img_list[np.array(scores_perc_raw).argmax()])
+    print('argmax psnr', img_list[np.array(score_psnr).argmax()])
+    print('argmax ssim', img_list[np.array(score_ssim).argmax()])
+
+
     print('perc ',avg_percent,'scores ',avg_score,'percraws ' ,avg_percent_raw,' distances',avg_distances, ' psnr',avg_score_psnr,' ssim',avg_score_ssim)
+
