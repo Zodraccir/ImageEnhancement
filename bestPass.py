@@ -5,11 +5,12 @@ import image_enhancement
 from utils import plot_learning_curve, make_env
 import argparse
 import os
-
+from numpy import savetxt
 import random
 import kornia.losses as losses
 from PIL import Image
 from torchvision import transforms
+import csv
 
 path_training_image="RawTraining/"
 path_expert_image="ExpC/"
@@ -217,6 +218,15 @@ if __name__ == '__main__':
     print('argmax psnr', img_list[np.array(score_psnr).argmax()])
     print('argmax ssim', img_list[np.array(score_ssim).argmax()])
 
+
+
+    with open('results.csv', mode='w') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        j=0
+        for i in img_list:
+            writer.writerow([i, format(scores[j], '.2f'), scores_perc[j].item(),scores_perc_raw[j].item(),score_psnr[j].item(),score_ssim[j].item()])
+            j=j+1
 
     print('perc ',avg_percent,'scores ',avg_score,'percraws ' ,avg_percent_raw,' distances',avg_distances, ' psnr',avg_score_psnr,' ssim',avg_score_ssim)
 
