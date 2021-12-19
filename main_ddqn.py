@@ -148,7 +148,7 @@ if __name__ == '__main__':
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) + '_' \
             + str(n_games) + 'games'
     figure_file = 'plots/' + fname + '.png'
-    figure_file1= 'plots_custom/' + fname + '.png'
+    figure_file1= 'plots_custom/' + fname + 'custom.png'
 
     x = [i+1 for i in range(len(scores))]
 
