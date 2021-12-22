@@ -96,14 +96,14 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		if abs(distance_state.item())<threshold:
-			done=10
+			done=1
 			print("Passsaggi effettuati correttamente")
 
 		if distance_state.item()>(self.initial_distance+0.4*self.initial_distance):
 			done=1
 			#print("Limite sforato")
 		if self.steps>25:
-			done=1
+			done=11
 			#print("Max operazioni effettuate")
 
 		#print(reward_state.item())
@@ -116,9 +116,9 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.total_reward=self.total_reward+reward
 
-		if(reward<-0.5):
+		#if(reward<-0.5):
 			#print("passaggio sbagliato")
-			done=1
+			#done=1
 
 		return self.state.clone(), reward, done, distance_state
 

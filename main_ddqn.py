@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #lr=0002 RMSprop
     agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=args.learningRate,
                      input_dims=(env.observation_space.shape),
-                     n_actions=env.action_space.n, mem_size=100000, eps_min=0.05,
+                     n_actions=env.action_space.n, mem_size=100000, eps_min=0.10,
                      batch_size=args.batchSize, replace=1000, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
@@ -101,8 +101,9 @@ if __name__ == '__main__':
             action = agent.choose_action(state_.unsqueeze_(0))
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
-           
-            
+
+            if done==11:
+                break
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
 
