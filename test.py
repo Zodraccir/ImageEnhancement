@@ -2,24 +2,31 @@ import random,os,cv2
 import gym
 import numpy as np
 import image_enhancement
+from PIL import Image
+from torchvision import transforms
+
 
 if __name__ == '__main__':
     file = int(input("Please file :\n"))
-    img_list = os.listdir("rawTest")[file:file+1]
+    img_list = os.listdir("RawTest")[file:file+1]
     env = gym.make('image_enhancement-v0')
+
+    convert_tensor = transforms.ToTensor()
+
     for i in range(3):
         done = False
 
         #print(".......... EPISODE "+str(i)+" --------------")
-        file=random.choice(img_list)
 
-        img_path_raw = "rawTest/"+file
-        print("img_path",img_path_raw)
-        raw = cv2.imread(img_path_raw)
-        img_path_exp = "ExpTest/"+file
-        target = cv2.imread(img_path_exp)
+        file = random.choice(img_list)
 
-        observation = env.reset(raw,target)
+        img_path_raw = Image.open("RawTest/" + file)
+        img_path_exp = Image.open("ExpC/" + file)
+
+        raw = convert_tensor(img_path_raw)
+        target = convert_tensor(img_path_exp)
+
+        observation = env.reset(raw, target)
 
         action=1
         score=0

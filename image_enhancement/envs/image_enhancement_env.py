@@ -70,28 +70,52 @@ class ImageEnhancementEnv(gym.Env):
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		#self.state=performAction(action,self.state)
+
+
+		distances=[]
+		print(self.initial_distance)
+		for a in range(0,self.action_space.n):
+			#print("doing action",a)
+			tmp_state=select_fine(self.state,int(a))
+			distances.append(calculateDistance(self.target,tmp_state))
+
+
+		#print(distances)
+		distances.sort()
+		#print(distances)
+		max=distances[0] #max value in sense of minimum distance from targer
+		min=distances[-1] #min value in sense of maximum distance from targer
+
+		#print(min,max)
+
+
 		self.state=select_fine(self.state,action)
 		distance_state = calculateDistance(self.target,self.state)
+
+		reward= 2*((distance_state-min)/(max-min))-1
+
+		print("rewad!!!",reward)
+
 		distance_previus_state= calculateDistance(self.target,self.previus_state)
-		reward = distance_previus_state-distance_state
+		#reward = distance_previus_state-distance_state
 		threshold=0.00001
 
 		distance_from_previus=calculateDistance(self.previus_state,self.state)
 		done=0
 
-		if(reward>0):
+		#if(reward>0):
 
-			splits=distance_previus_state/10
+			#splits=distance_previus_state/10
 
-			for i in range(1,10):
-				if(reward<i*splits):
-					reward=0.1*i
-					break
+			#for i in range(1,10):
+				#if(reward<i*splits):
+					#reward=0.1*i
+					#break
 
 			#print(reward)
 
-		elif(reward<0):
-			reward=-1
+		#elif(reward<0):
+			#reward=-1
 
 
 

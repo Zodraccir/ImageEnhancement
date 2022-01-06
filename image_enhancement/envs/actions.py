@@ -7,7 +7,7 @@ import torchvision
 
 
 def select(img, act):
-    img = img.unsqueeze_(0)
+    img = img.detach().clone().unsqueeze_(0)
     if act == 0:
         return gamma_corr(img, 0.6, 0).squeeze()
     elif act == 1:
@@ -69,7 +69,7 @@ def select(img, act):
 
 
 def select_fine(img, act):
-    img = img.unsqueeze_(0)
+    img = img.detach().clone().unsqueeze_(0)
     if act == 0:
         return gamma_corr(img, 0.775, 0).squeeze()
     elif act == 1:
