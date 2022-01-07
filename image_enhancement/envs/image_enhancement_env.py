@@ -73,7 +73,7 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		distances=[]
-		print(self.initial_distance)
+		#print(self.initial_distance)
 		for a in range(0,self.action_space.n):
 			#print("doing action",a)
 			tmp_state=select_fine(self.state,int(a))
@@ -82,21 +82,31 @@ class ImageEnhancementEnv(gym.Env):
 
 		#print(distances)
 		distances.sort()
-		#print(distances)
-		max=distances[0] #max value in sense of minimum distance from targer
-		min=distances[-1] #min value in sense of maximum distance from targer
-
-		#print(min,max)
+		max = distances[0]  # max value in sense of minimum distance from targer
+		min = distances[-1]  # min value in sense of maximum distance from targer
+		distance_previus_state = calculateDistance(self.target, self.previus_state)
 
 
 		self.state=select_fine(self.state,action)
 		distance_state = calculateDistance(self.target,self.state)
+		reward=0
+		#print(min, max)
 
-		reward= 2*((distance_state-min)/(max-min))-1
+		#print("dist-stat",distance_state)
+		if distance_state>distance_previus_state:
+			#print("lesser then previus")
+			reward=1-((distance_state-distance_previus_state)/(min-distance_previus_state))-1
+		elif distance_state<distance_previus_state:
+			#print("more then previus")
+			reward=1-	((distance_state-max)/(distance_previus_state-max))
+		elif distance_state==distance_previus_state:
+			#print("equal")
+			reward=0
 
-		print("rewad!!!",reward)
 
-		distance_previus_state= calculateDistance(self.target,self.previus_state)
+		#print("rewad!!!",reward)
+
+
 		#reward = distance_previus_state-distance_state
 		threshold=0.00001
 
