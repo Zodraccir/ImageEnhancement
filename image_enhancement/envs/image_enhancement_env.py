@@ -80,7 +80,7 @@ class ImageEnhancementEnv(gym.Env):
 			distances.append(calculateDistance(self.target,tmp_state))
 
 
-		#print(distances)
+		print(distances)
 		distances.sort()
 		max = distances[0]  # max value in sense of minimum distance from targer
 		min = distances[-1]  # min value in sense of maximum distance from targer
@@ -103,7 +103,12 @@ class ImageEnhancementEnv(gym.Env):
 			#print("equal")
 			reward=0
 
-
+		if(reward>=0.8):
+			reward=1
+		elif(reward<0.8 and reward > -0.1):
+			reward=0
+		elif(reward <= 0.1):
+			reward=-1
 		#print("rewad!!!",reward)
 
 
@@ -134,9 +139,9 @@ class ImageEnhancementEnv(gym.Env):
 			print("Passsaggi effettuati correttamente")
 
 		if distance_state.item()>(self.initial_distance+0.4*self.initial_distance):
-			done=1
+			done=11
 			#print("Limite sforato")
-		if self.steps>25:
+		if self.steps>15:
 			done=11
 			#print("Max operazioni effettuate")
 

@@ -125,7 +125,7 @@ if __name__ == '__main__':
                 #print("new reward ",info)
                 break
 
-            prev_distance = reward
+            prev_distance = info
 
             #print("distance from target ", info, reward)
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
