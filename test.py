@@ -18,7 +18,9 @@ if __name__ == '__main__':
 
         #print(".......... EPISODE "+str(i)+" --------------")
 
-        file = random.choice(img_list)
+        #file = random.choice(img_list)
+
+        file="1964.png"
 
         img_path_raw = Image.open("RawTest/" + file)
         img_path_exp = Image.open("ExpC/" + file)
