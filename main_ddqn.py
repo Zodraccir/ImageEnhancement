@@ -5,7 +5,7 @@ import image_enhancement
 import gym
 import numpy as np
 
-from ddqn_agent import DDQNAgent
+from ddqn_agent_resnet import DDQNAgent
 from utils import plot_learning_curve
 
 from torchvision import transforms
@@ -15,6 +15,9 @@ path_training_image="RawTraining/"
 path_expert_image="ExpC/"
 path_test_image="RawTest/"
 
+
+#per training 20k, arrivare a 17k episodi con epslon decaduto= 37e-7
+#per training 40k, arrivare a 37k espisodi con eplson decaduto=17e-7
 
 if __name__ == '__main__':
 
