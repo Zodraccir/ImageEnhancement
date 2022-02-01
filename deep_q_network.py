@@ -163,6 +163,8 @@ class DeepQNetwork(nn.Module):
         h=x.view(x.shape[0],-1)
         #print(h.shape)
         actions=self.classifier(h)
+
+        print("ACTION",actions.shape)
         return actions
 
 

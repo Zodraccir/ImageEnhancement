@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 
     #lr=0002 RMSprop
-    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=args.learningRate,
+    agent = DDQNAgent(gamma=0.94, epsilon=1.0, lr=args.learningRate,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=100000, eps_min=0.10,
                      batch_size=args.batchSize, replace=1000, eps_dec=args.epsdecay,

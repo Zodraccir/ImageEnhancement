@@ -177,3 +177,12 @@ class DeepQNetwork(nn.Module):
                 self.eval()
         else:
         	print("file not exists")
+
+
+def test():
+    net = DeepQNetwork(0.01, 28,input_dims=[3,64,64],name='_q_eval',chkpt_dir='test')
+    y = net(T.randn(4, 3, 64, 64))
+    print(y.size())
+    print(y)
+
+test()
