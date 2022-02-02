@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-from ddqn_agent_resnet import DDQNAgent
+from ddqn_agent import DDQNAgent
 import image_enhancement
 from utils import plot_learning_curve, make_env
 import argparse
