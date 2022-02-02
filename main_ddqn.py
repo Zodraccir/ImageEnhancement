@@ -5,7 +5,7 @@ import image_enhancement
 import gym
 import numpy as np
 
-from ddqn_agent_resnet import DDQNAgent
+from ddqn_agent import DDQNAgent
 from utils import plot_learning_curve
 
 from torchvision import transforms
@@ -159,5 +159,10 @@ if __name__ == '__main__':
     plot_learning_curve(x, scores, eps_history, figure_file1)
     plot_learning_curve(steps_array, scores, eps_history, figure_file)
 
-    
-
+    with open('learning_results.csv', mode='w') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        j = 0
+        for i in img_list:
+            writer.writerow(
+                [i, j,format(scores[j], '.2f'), scores_perc[j].item(), eps_history[j].item(),steps_array[j].item(),numbers_actions[j].item()])
+            j = j + 1
