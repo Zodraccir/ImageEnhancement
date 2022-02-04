@@ -4,6 +4,7 @@ import random
 import image_enhancement
 import gym
 import numpy as np
+import csv
 
 from ddqn_agent import DDQNAgent
 from utils import plot_learning_curve
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
 
 
-    scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
+    scores, eps_history, steps_array , scores_perc , numbers_actions, final_distances = [], [], [], [], [], []
     img_list = os.listdir(path_training_image)
 
 
@@ -135,6 +136,7 @@ if __name__ == '__main__':
         scores.append(score)
         scores_perc.append(score_perc)
         eps_history.append(agent.epsilon)
+        final_distances.append(final_distance)
 
         #avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,' Image:', file ,'score: %.1f' % score,
@@ -162,7 +164,7 @@ if __name__ == '__main__':
     with open('learning_results.csv', mode='w') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         j = 0
-        for i in img_list:
+        for i in range(len(scores)):
             writer.writerow(
-                [i, j,format(scores[j], '.2f'), scores_perc[j].item(), eps_history[j].item(),steps_array[j].item(),numbers_actions[j].item()])
+                [i, scores[j].item(), scores_perc[j].item(), eps_history[j], steps_array[j], final_distances[j].item()])
             j = j + 1

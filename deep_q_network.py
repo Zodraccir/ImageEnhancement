@@ -164,7 +164,7 @@ class DeepQNetwork(nn.Module):
         #print(h.shape)
         actions=self.classifier(h)
 
-        print("ACTION",actions.shape)
+        #print("ACTION",actions.shape)
         return actions
 
 

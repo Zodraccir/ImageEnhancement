@@ -22,7 +22,7 @@ def calculateDistance(i1, i2):
 
 def euclideanDistance(i1,i2):
 	return torch.dist(i1, i2, 2)
-	
+
 
 class ImageEnhancementEnv(gym.Env):
 	metadata = {'render.modes': ['human']}
@@ -61,7 +61,7 @@ class ImageEnhancementEnv(gym.Env):
 			temp = select_fine(temp, a)
 		self.finalImage = temp.detach().clone()
 
-		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)
+		self.final_distance_RAW=calculateDistance(self.finalImage,self.targetRaw)
 		self.final_image_RAW_batched = self.finalImage.detach().clone().unsqueeze(0)
 
 
@@ -77,18 +77,18 @@ class ImageEnhancementEnv(gym.Env):
 		for a in range(0,self.action_space.n):
 			#print("doing action",a)
 			tmp_state=select_fine(self.state,int(a))
-			distances.append(euclideanDistance(self.target,tmp_state))
+			distances.append(calculateDistance(self.target,tmp_state))
 
 
 		#print(distances)
 		distances.sort()
 		max = distances[0]  # max value in sense of minimum distance from targer
 		min = distances[-1]  # min value in sense of maximum distance from targer
-		distance_previus_state = euclideanDistance(self.target, self.previus_state)
+		distance_previus_state = calculateDistance(self.target, self.previus_state)
 
 
 		self.state=select_fine(self.state,action)
-		distance_state = euclideanDistance(self.target,self.state)
+		distance_state = calculateDistance(self.target,self.state)
 		reward=0
 		#print(min, max)
 
@@ -102,6 +102,9 @@ class ImageEnhancementEnv(gym.Env):
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
+
+
+
 		'''
 		if(reward>=0.8):
 			reward=1
@@ -115,7 +118,7 @@ class ImageEnhancementEnv(gym.Env):
 		#reward = distance_previus_state-distance_state
 		threshold=0.00001
 
-		distance_from_previus=euclideanDistance(self.previus_state,self.state)
+		distance_from_previus=calculateDistance(self.previus_state,self.state)
 		done=0
 
 		#if(reward>0):
@@ -173,14 +176,14 @@ class ImageEnhancementEnv(gym.Env):
 		self.state=rawImage.detach().clone()
 		self.target = expImage.detach().clone()
 
-		self.initial_distance = euclideanDistance(self.target, self.state)
+		self.initial_distance = calculateDistance(self.target, self.state)
 
 		self.startImage = rawImage.detach().clone()
 		self.startImageRaw=raw.detach().clone()
 
 		self.targetRaw=target.detach().clone()
 
-		self.initial_distance_RAW=euclideanDistance(self.startImageRaw,self.targetRaw)
+		self.initial_distance_RAW=calculateDistance(self.startImageRaw,self.targetRaw)
 
 		self.target_image_RAW_batched=self.targetRaw.detach().clone().unsqueeze(0)
 
