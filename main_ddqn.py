@@ -53,7 +53,7 @@ if __name__ == '__main__':
     #lr=0002 RMSprop
     agent = DDQNAgent(gamma=0.94, epsilon=1.0, lr=args.learningRate,
                      input_dims=(env.observation_space.shape),
-                     n_actions=env.action_space.n, mem_size=100000, eps_min=0.10,
+                     n_actions=env.action_space.n, mem_size=10000, eps_min=0.10,
                      batch_size=args.batchSize, replace=1000, eps_dec=args.epsdecay,
                      chkpt_dir='models/', algo='DDQNAgent',
                      env_name='image_enhancement-v0')
@@ -79,8 +79,15 @@ if __name__ == '__main__':
     img_path_exp = "ExpTest/" + file
     target = cv2.imread(img_path_exp)
     '''
-    convert_tensor = transforms.ToTensor()
+    #convert_tensor = transforms.Compose
 
+
+    convert_tensor = transforms.Compose([
+        transforms.RandomResizedCrop(224),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+
+    ])
     for i in range(n_games):
         done = False
 

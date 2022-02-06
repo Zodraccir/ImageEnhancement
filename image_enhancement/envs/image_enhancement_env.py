@@ -14,7 +14,7 @@ from image_enhancement.envs.actions import select, select_fine
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-size_image_training=64
+size_image_training=224
 numbers_of_actions=28
 
 def calculateDistance(i1, i2):
@@ -170,8 +170,11 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.steps=0
 
-		rawImage=T.functional.resize(raw,size=[size_image_training])
-		expImage=T.functional.resize(target,size=[size_image_training])
+		#rawImage=T.functional.resize(raw,size=[size_image_training])
+		#expImage=T.functional.resize(target,size=[size_image_training])
+
+		rawImage=raw
+		expImage=target
 
 		self.state=rawImage.detach().clone()
 		self.target = expImage.detach().clone()
