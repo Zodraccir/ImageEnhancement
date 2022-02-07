@@ -70,7 +70,12 @@ if __name__ == '__main__':
 
     stats_actions=[0]*env.action_space.n
 
-    convert_tensor = transforms.ToTensor()
+    convert_tensor = transforms.Compose([
+        transforms.RandomResizedCrop(224),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+
+    ])
     for i  in img_list:
         done = False
 
