@@ -91,7 +91,7 @@ class ImageEnhancementEnv(gym.Env):
 		distance_state = calculateDistance(self.target,self.state)
 		reward=0
 		#print(min, max)
-
+		'''
 		#print("dist-stat",distance_state)
 		if distance_state>distance_previus_state:
 			#print("lesser then previus")
@@ -102,9 +102,24 @@ class ImageEnhancementEnv(gym.Env):
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
+		'''
 
 
 
+		if distance_state > distance_previus_state:
+			# print("more then previus")
+			reward = -1
+		elif distance_state < distance_previus_state:
+
+			# print("lesser then previus")
+			reward = 0
+			if distance_state == max:
+				reward = 1
+		elif distance_state == distance_previus_state:
+			# print("equal")
+			reward = 0
+
+		#print(distance_state, reward)
 		'''
 		if(reward>=0.8):
 			reward=1

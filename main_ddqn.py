@@ -173,5 +173,5 @@ if __name__ == '__main__':
         j = 0
         for i in range(len(scores)):
             writer.writerow(
-                [i, scores[j].item(), scores_perc[j].item(), eps_history[j], steps_array[j], final_distances[j].item()])
+                [i, scores[j], scores_perc[j].item(), eps_history[j], steps_array[j], final_distances[j].item()])
             j = j + 1
