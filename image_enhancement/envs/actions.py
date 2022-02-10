@@ -65,7 +65,7 @@ def select(img, act):
     elif act == 27:
         return torchvision.transforms.functional.adjust_hue(img, -0.05).squeeze()
     elif act == 28:
-        return img
+        return img.squeeze()
 
 
 def select_fine(img, act):
@@ -127,7 +127,7 @@ def select_fine(img, act):
     elif act == 27:
         return torchvision.transforms.functional.adjust_hue(img, -0.025).squeeze()
     elif act == 28:
-        return img
+        return img.squeeze()
 
 
 def gamma_corr(image, gamma, channel=None):

@@ -107,16 +107,21 @@ if __name__ == '__main__':
         n_actions=0
         final_distance=env.initial_distance
         initial_distance=env.initial_distance
+
+
+        print(initial_distance)
+
         while not done:
 
             action = agent.choose_action(state_.unsqueeze_(0))
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
 
-            if done==11:
-                break
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
+
+            if done==11:
+                break
 
             if learn_:
                 agent.store_transition(state_.cpu(), action,
@@ -126,15 +131,10 @@ if __name__ == '__main__':
 
             n_actions+=1
             #print("action " , n_actions, state_.sum())
-
-
             n_steps += 1
+
             if not done:
             	final_distance = info
-
-
-
-
 
         score_perc=(1-(final_distance/initial_distance))*100
 

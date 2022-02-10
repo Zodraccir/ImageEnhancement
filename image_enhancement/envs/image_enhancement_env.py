@@ -15,7 +15,7 @@ from image_enhancement.envs.actions import select, select_fine
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 size_image_training=224
-numbers_of_actions=28
+numbers_of_actions=29
 
 def calculateDistance(i1, i2):
 	return torch.mean((i1 - i2) ** 2)
@@ -93,6 +93,11 @@ class ImageEnhancementEnv(gym.Env):
 		#print(min, max)
 
 		#print("dist-stat",distance_state)
+
+		upgrade= (1-(distance_state/self.initial_distance))*100
+		done = 0
+
+
 		if distance_state>distance_previus_state:
 			#print("lesser then previus")
 			reward=1-((distance_state-distance_previus_state)/(min-distance_previus_state))-1
@@ -102,9 +107,19 @@ class ImageEnhancementEnv(gym.Env):
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
+			if distance_previus_state<max:
+				done=1
+				if upgrade>95:
+					reward=10
+				elif upgrade>90:
+					reward=5
+				elif upgrade > 80:
+					reward=1
+				else:
+					reward=-5
 
 
-
+		#print(upgrade,reward,done,distance_previus_state,distance_state,max)
 		'''
 		if(reward>=0.8):
 			reward=1
@@ -116,10 +131,10 @@ class ImageEnhancementEnv(gym.Env):
 		'''
 
 		#reward = distance_previus_state-distance_state
-		threshold=0.00001
+		#threshold=0.00001
 
-		distance_from_previus=calculateDistance(self.previus_state,self.state)
-		done=0
+		#distance_from_previus=calculateDistance(self.previus_state,self.state)
+
 
 		#if(reward>0):
 
@@ -137,6 +152,8 @@ class ImageEnhancementEnv(gym.Env):
 
 
 
+		'''
+
 		if abs(distance_state.item())<threshold:
 			done=1
 			print("Passsaggi effettuati correttamente")
@@ -147,7 +164,7 @@ class ImageEnhancementEnv(gym.Env):
 		if self.steps>15:
 			done=11
 			#print("Max operazioni effettuate")
-
+		'''
 		#print(reward_state.item())
 		#print(reward)
 
@@ -155,7 +172,9 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.finalImage=self.state.clone()
 
-
+		if self.steps > 15:
+			done = 11
+		# print("Max operazioni effettuate")
 		self.total_reward=self.total_reward+reward
 
 		#if(reward<-0.5):
