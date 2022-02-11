@@ -111,7 +111,7 @@ if __name__ == '__main__':
         initial_distance=env.initial_distance
 
 
-        print(initial_distance)
+        #print(initial_distance)
 
         while not done:
             if(env.steps>max_num_step):

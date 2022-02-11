@@ -91,7 +91,7 @@ class DDQNAgent(object):
         # if(len(T.nonzero(T.max(actions,T.tensor([0.])))) < 1):
         # print("nein")
         # return -1
-        posact = False
+        '''posact = False
         for a in actions.cpu().detach().numpy()[0]:
             # print(a)
             if (a > -0.9):
@@ -99,6 +99,7 @@ class DDQNAgent(object):
         if (not posact):
             print(actions)
             return -1
+            '''
         action = T.argmax(actions).item()
 
         return action

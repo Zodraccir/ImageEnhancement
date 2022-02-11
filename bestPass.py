@@ -125,6 +125,9 @@ if __name__ == '__main__':
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
 
+            if done==1:
+                break
+
             if (prev_distance < info):
                 noposact = 1
                 #print("new reward ",info)
