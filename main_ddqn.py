@@ -28,6 +28,7 @@ if __name__ == '__main__':
     parser.add_argument('--learningRate','-lr', help="learningRate",type=float,default=0.001)
     parser.add_argument('--batchSize','-b', help="batch size",type=int,default=64)
     parser.add_argument('--memSize', '-m', help="mem size", type=int, default=100000)
+    parser.add_argument('--maxNumStep', '-s', help="max num size", type=int, default=20)
     #print(parser.format_help())
     # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
     #
@@ -49,9 +50,10 @@ if __name__ == '__main__':
     learn_= True
     n_games = args.ngames
 
+    max_num_step=args.maxNumStep
 
     #lr=0002 RMSprop
-    agent = DDQNAgent(gamma=0.94, epsilon=1.0, lr=args.learningRate,
+    agent = DDQNAgent(gamma=0.99, epsilon=1.0, lr=args.learningRate,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=args.memSize, eps_min=0.10,
                      batch_size=args.batchSize, replace=1000, eps_dec=args.epsdecay,
@@ -63,7 +65,7 @@ if __name__ == '__main__':
 
     n_steps = 0
     
-    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
+    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games,'max num step',max_num_step, 'number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
 
 
     scores, eps_history, steps_array , scores_perc , numbers_actions, final_distances = [], [], [], [], [], []
@@ -112,7 +114,8 @@ if __name__ == '__main__':
         print(initial_distance)
 
         while not done:
-
+            if(env.steps>max_num_step):
+                break
             action = agent.choose_action(state_.unsqueeze_(0))
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
@@ -120,8 +123,7 @@ if __name__ == '__main__':
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
 
-            if done==11:
-                break
+
 
             if learn_:
                 agent.store_transition(state_.cpu(), action,

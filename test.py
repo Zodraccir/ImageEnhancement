@@ -4,9 +4,38 @@ import numpy as np
 import image_enhancement
 from PIL import Image
 from torchvision import transforms
+from scipy.special import softmax
 
 
 if __name__ == '__main__':
+    '''
+    distances=[34,9,3,4,44,1]
+
+
+
+    keys=list(range(0, len(distances)))
+    x=dict(zip(keys,distances))
+
+
+    print (x)
+    x= {k: v for k, v in sorted(x.items(), key=lambda item: item[1])}
+    max = max(x.values())  # max value in sense of minimum distance from targer
+    min = min(x.values())  # min value in sense of maximum distance from targer
+
+    #print(max,min)
+    print(x)
+    for i in range(0,len(distances)):
+        value=(2*(x[i]-max)/(min-max))-1
+        if value>0:
+            value=pow(value,3)
+        x[i]=value
+
+
+    print (x)
+
+    print(x[0])
+
+    '''
     file = int(input("Please file :\n"))
     img_list = os.listdir("RawTest")[file:file+1]
     env = gym.make('image_enhancement-v0')
@@ -20,9 +49,9 @@ if __name__ == '__main__':
 
         #file = random.choice(img_list)
 
-        file="1964.png"
+        file="0004.png"
 
-        img_path_raw = Image.open("RawTest/" + file)
+        img_path_raw = Image.open("RawTraining/" + file)
         img_path_exp = Image.open("ExpC/" + file)
 
         raw = convert_tensor(img_path_raw)
@@ -35,17 +64,17 @@ if __name__ == '__main__':
 
         print('initial distance', env.initial_distance)
         list_actions=[]
-        while action:
+        while not done:
             action = input("Please action a :\n")
-            if(action == ""):
-                break
+
             list_actions.append(int(action))
             observation_, reward, done, info = env.step(int(action))
             print(reward,info)
             score += reward
             lastinfo=info
+
         print('score: ', score)
-        print('final distance ',env.initial_distance-lastinfo)
+        print('final distance ',lastinfo)
         env.doStepOriginal(list_actions)
         env.multiRender()
 

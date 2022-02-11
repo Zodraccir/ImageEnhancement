@@ -73,29 +73,35 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		distances=[]
+
 		#print(self.initial_distance)
-		for a in range(0,self.action_space.n):
+		for a in range(0,self.action_space.n-1):
 			#print("doing action",a)
 			tmp_state=select_fine(self.state,int(a))
 			distances.append(calculateDistance(self.target,tmp_state))
 
+		distance_previus_state = calculateDistance(self.target, self.previus_state)
 
 		#print(distances)
 		distances.sort()
 		max = distances[0]  # max value in sense of minimum distance from targer
 		min = distances[-1]  # min value in sense of maximum distance from targer
-		distance_previus_state = calculateDistance(self.target, self.previus_state)
 
+		#print(max,min)
+		#print(distances)
 
 		self.state=select_fine(self.state,action)
+
+
+
+
 		distance_state = calculateDistance(self.target,self.state)
 		reward=0
 		#print(min, max)
 
 		#print("dist-stat",distance_state)
 
-		upgrade= (1-(distance_state/self.initial_distance))*100
-		done = 0
+
 
 
 		if distance_state>distance_previus_state:
@@ -103,22 +109,21 @@ class ImageEnhancementEnv(gym.Env):
 			reward=1-((distance_state-distance_previus_state)/(min-distance_previus_state))-1
 		elif distance_state<distance_previus_state:
 			#print("more then previus")
-			reward=1-	((distance_state-max)/(distance_previus_state-max))
+			reward=pow(1-	((distance_state-max)/(distance_previus_state-max)),3)
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
-			if distance_previus_state<max:
-				done=1
-				if upgrade>95:
-					reward=10
-				elif upgrade>90:
-					reward=5
-				elif upgrade > 80:
-					reward=1
-				else:
-					reward=-5
 
 
+		upgrade = (1 - (distance_state / self.initial_distance))
+		if(upgrade<=-1):
+			upgrade=-1
+		done = 0
+		if action==28:
+			done=1
+			reward=upgrade
+
+		#print(action, reward)
 		#print(upgrade,reward,done,distance_previus_state,distance_state,max)
 		'''
 		if(reward>=0.8):
@@ -172,8 +177,8 @@ class ImageEnhancementEnv(gym.Env):
 
 		self.finalImage=self.state.clone()
 
-		if self.steps > 15:
-			done = 11
+		'''if self.steps > 20:
+			done = 11'''
 		# print("Max operazioni effettuate")
 		self.total_reward=self.total_reward+reward
 
