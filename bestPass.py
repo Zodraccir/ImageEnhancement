@@ -114,24 +114,16 @@ if __name__ == '__main__':
 
             #print("action selected :", action )
 
-            
-            if(action==-1):
-                noposact = 1
-                print("finito no positive action")
-                break
-            
+
+
 
             
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
 
-            if done==1:
-                break
 
-            if (prev_distance < info):
-                noposact = 1
-                #print("new reward ",info)
-                break
+
+
 
             prev_distance = info
 
@@ -153,7 +145,8 @@ if __name__ == '__main__':
 
             actions_done.append(action)
             stats_actions[action]=stats_actions[action]+1
-
+            if done==1:
+                break
             #if done:
             	#print("finito")
 

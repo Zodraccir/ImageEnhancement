@@ -106,10 +106,10 @@ class ImageEnhancementEnv(gym.Env):
 
 		if distance_state>distance_previus_state:
 			#print("lesser then previus")
-			reward=1-((distance_state-distance_previus_state)/(min-distance_previus_state))-1
+			reward=-1
 		elif distance_state<distance_previus_state:
 			#print("more then previus")
-			reward=pow(1-	((distance_state-max)/(distance_previus_state-max)),3)
+			reward=1-((distance_state-max)/(distance_previus_state-max)) -1 #if reward is 0, best action
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
