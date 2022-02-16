@@ -85,16 +85,15 @@ if __name__ == '__main__':
 
 
     convert_tensor = transforms.Compose([
-        transforms.RandomResizedCrop(224),
-        transforms.RandomHorizontalFlip(),
+        transforms.Resize(224),
         transforms.ToTensor(),
-
     ])
     for i in range(n_games):
-        done = False
+
 
         #print(".......... EPISODE "+str(i)+" --------------")
         file=random.choice(img_list)
+        #file = img_list[7]
 
         img_path_raw = Image.open(path_training_image+file)
         img_path_exp = Image.open(path_expert_image+file)
@@ -112,7 +111,7 @@ if __name__ == '__main__':
 
 
         #print(initial_distance)
-
+        done = False
         while not done:
             if(env.steps>max_num_step):
                 break
@@ -139,6 +138,8 @@ if __name__ == '__main__':
             	final_distance = info
 
         score_perc=(1-(final_distance/initial_distance))*100
+
+
 
         steps_array.append(n_steps)
         numbers_actions.append(numbers_actions)
@@ -170,10 +171,11 @@ if __name__ == '__main__':
     plot_learning_curve(x, scores, eps_history, figure_file1)
     plot_learning_curve(steps_array, scores, eps_history, figure_file)
 
-    with open('learning_results.csv', mode='w') as file:
+    with open('learning_results.csv', mode='w', newline='') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         j = 0
         for i in range(len(scores)):
+
             writer.writerow(
-                [i, scores[j].item(), scores_perc[j].item(), eps_history[j], steps_array[j], final_distances[j].item()])
+                [i, scores[j], scores_perc[j], eps_history[j], steps_array[j], final_distances[j]])
             j = j + 1

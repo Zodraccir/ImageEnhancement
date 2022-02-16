@@ -18,10 +18,10 @@ size_image_training=224
 numbers_of_actions=29
 
 def calculateDistance(i1, i2):
-	return torch.mean((i1 - i2) ** 2)
+	return torch.mean((i1 - i2) ** 2).item()
 
 def euclideanDistance(i1,i2):
-	return torch.dist(i1, i2, 2)
+	return torch.dist(i1, i2, 2).item()
 
 
 class ImageEnhancementEnv(gym.Env):
@@ -70,62 +70,43 @@ class ImageEnhancementEnv(gym.Env):
 		self.previus_state=self.state.detach().clone()
 		self.steps+=1
 		#self.state=performAction(action,self.state)
-
-
 		distances=[]
-
 		#print(self.initial_distance)
 		for a in range(0,self.action_space.n-1):
 			#print("doing action",a)
 			tmp_state=select_fine(self.state,int(a))
 			distances.append(calculateDistance(self.target,tmp_state))
-
 		distance_previus_state = calculateDistance(self.target, self.previus_state)
-
 		#print(distances)
 		distances.sort()
 		max = distances[0]  # max value in sense of minimum distance from targer
 		min = distances[-1]  # min value in sense of maximum distance from targer
-
 		#print(max,min)
 		#print(distances)
-
 		self.state=select_fine(self.state,action)
-
-
-
-
 		distance_state = calculateDistance(self.target,self.state)
 		reward=0
 		#print(min, max)
-
 		#print("dist-stat",distance_state)
-
-
-
-
+		done = 0
 		if distance_state>distance_previus_state:
 			#print("lesser then previus")
 			reward=-1
+			done=1
 		elif distance_state<distance_previus_state:
 			#print("more then previus")
-			reward=1-((distance_state-max)/(distance_previus_state-max)) -1 #if reward is 0, best action
+			#reward=1-((distance_state-max)/(distance_previus_state-max)) -1 #if reward is 0, best action
+			reward=1/(self.initial_distance / (distance_previus_state-distance_state))
 		elif distance_state==distance_previus_state:
 			#print("equal")
 			reward=0
-
-
 		upgrade = (1 - (distance_state / self.initial_distance))
-		if(upgrade<=0.7):
+		#print(self.initial_distance, distance_state, distance_previus_state,(distance_previus_state-distance_state),"reward", reward, upgrade)
+		if(upgrade<=0.8):
 			upgrade=-1
-
-
-		done = 0
 		if action==28:
 			done=1
-			reward=upgrade
-
-
+			reward=(upgrade-0.8)/(1-0.8)
 		#print(action, reward)
 		#print(upgrade,reward,done,distance_previus_state,distance_state,max)
 		'''
@@ -137,14 +118,10 @@ class ImageEnhancementEnv(gym.Env):
 			reward=-1
 		#print("rewad!!!",reward)
 		'''
-
 		#reward = distance_previus_state-distance_state
 		#threshold=0.00001
-
 		#distance_from_previus=calculateDistance(self.previus_state,self.state)
-
-
-		#if(reward>0):
+    	#if(reward>0):
 
 			#splits=distance_previus_state/10
 
@@ -207,6 +184,9 @@ class ImageEnhancementEnv(gym.Env):
 		self.target = expImage.detach().clone()
 
 		self.initial_distance = calculateDistance(self.target, self.state)
+
+		#print(self.state.mean(),self.state.std(),self.state.max())
+
 
 		self.startImage = rawImage.detach().clone()
 		self.startImageRaw=raw.detach().clone()

@@ -86,7 +86,7 @@ class DDQNAgent(object):
 
         
         actions = self.q_eval.forward(state)
-        #print(actions,actions.max(),actions.mean())
+        print(actions,actions.max(),actions.mean())
 
         # if(len(T.nonzero(T.max(actions,T.tensor([0.])))) < 1):
         # print("nein")
