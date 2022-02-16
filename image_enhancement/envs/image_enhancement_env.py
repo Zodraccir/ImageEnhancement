@@ -116,12 +116,15 @@ class ImageEnhancementEnv(gym.Env):
 
 
 		upgrade = (1 - (distance_state / self.initial_distance))
-		if(upgrade<=-1):
+		if(upgrade<=0.7):
 			upgrade=-1
+
+
 		done = 0
 		if action==28:
 			done=1
 			reward=upgrade
+
 
 		#print(action, reward)
 		#print(upgrade,reward,done,distance_previus_state,distance_state,max)
