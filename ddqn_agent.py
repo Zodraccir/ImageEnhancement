@@ -79,7 +79,7 @@ class DDQNAgent(object):
 
         return action
     
-    def choose_best_action(self, observation):
+    def choose_best_action(self, observation,bias):
         state = observation.clone().to(self.q_eval.device)
 
         #print("torch", T.mean(state))
@@ -94,10 +94,10 @@ class DDQNAgent(object):
         posact = False
         for a in actions.cpu().detach().numpy()[0]:
             # print(a)
-            if (a > -0.9):
+            if (a > bias):
                 posact = True
         if (not posact):
-            print(actions)
+            #print(actions)
             return -1
         action = T.argmax(actions).item()
 
