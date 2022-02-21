@@ -8,6 +8,7 @@ import torch
 from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
 
+
 from torchvision.utils import save_image
 
 from image_enhancement.envs.actions import select, select_fine
@@ -18,10 +19,10 @@ size_image_training=64
 numbers_of_actions=28
 
 def calculateDistance(i1, i2):
-	return torch.mean((i1 - i2) ** 2)
+	return torch.mean((i1 - i2) ** 2).item()
 
 def euclideanDistance(i1,i2):
-	return torch.dist(i1, i2, 2)
+	return torch.dist(i1, i2, 2).item()
 	
 
 class ImageEnhancementEnv(gym.Env):
@@ -95,11 +96,8 @@ class ImageEnhancementEnv(gym.Env):
 
 
 
-		if abs(distance_state.item())<threshold:
-			done=10
-			print("Passsaggi effettuati correttamente")
 
-		if distance_state.item()>(self.initial_distance+0.4*self.initial_distance):
+		if distance_state>(self.initial_distance+0.4*self.initial_distance):
 			done=1
 			#print("Limite sforato")
 		if self.steps>25:

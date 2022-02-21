@@ -59,7 +59,7 @@ if __name__ == '__main__':
     
     print(agent.q_eval.device)
 
-    scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances , score_psnr , score_ssim =  [], [], [], [], [], [] , [] , [] , []
+    scores, eps_history, steps_array, scores_perc, numbers_actions , scores_perc_raw , distances , score_psnr , score_ssim  =  [], [], [], [], [], [] , [] , [] , []
 
     img_list = os.listdir(path_test_image)
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     #img_list = os.listdir("rawTest")[21:22]
 
     stats_actions=[0]*env.action_space.n
-
+    fake_stop=0
     convert_tensor = transforms.ToTensor()
     for i  in img_list:
         done = False
@@ -123,6 +123,7 @@ if __name__ == '__main__':
             if (prev_distance < info):
                 noposact = 1
                 #print("new reward ",info)
+                fake_stop=fake_stop+1
                 break
 
             prev_distance = reward
@@ -199,6 +200,7 @@ if __name__ == '__main__':
         #if load_checkpoint and n_steps >= 18000:
             #break
 
+
     x = [i+1 for i in range(len(scores))]
     plot_learning_curve(steps_array, scores, eps_history, figure_file)
 
@@ -218,15 +220,14 @@ if __name__ == '__main__':
     print('argmax psnr', img_list[np.array(score_psnr).argmax()])
     print('argmax ssim', img_list[np.array(score_ssim).argmax()])
 
-
-
-    with open('results.csv', mode='w') as file:
-        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-        j=0
-        for i in img_list:
-            writer.writerow([i, format(scores[j], '.2f'), scores_perc[j].item(),scores_perc_raw[j].item(),score_psnr[j].item(),score_ssim[j].item()])
-            j=j+1
-
+    print('fake_stop',fake_stop)
     print('perc ',avg_percent,'scores ',avg_score,'percraws ' ,avg_percent_raw,' distances',avg_distances, ' psnr',avg_score_psnr,' ssim',avg_score_ssim)
 
+    with open('learning_results.csv', mode='w', newline='') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        j = 0
+        for i in img_list:
+            writer.writerow(
+                [i, scores[j], scores_perc[j], scores_perc_raw[j], score_psnr[j], score_ssim[j]])
+            j = j + 1

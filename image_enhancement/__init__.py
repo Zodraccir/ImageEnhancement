@@ -7,8 +7,8 @@ register(
     id='image_enhancement-v0',
     entry_point='image_enhancement.envs:ImageEnhancementEnv',
     #timestep_limit=1000,
-    reward_threshold=1.0,
-    nondeterministic = True,
+    #reward_threshold=1.0,
+    #nondeterministic = True,
     order_enforce=False,
 )
 

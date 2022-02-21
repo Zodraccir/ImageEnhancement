@@ -10,6 +10,7 @@ from utils import plot_learning_curve
 
 from torchvision import transforms
 from PIL import Image
+import csv
 
 path_training_image="RawTraining/"
 path_expert_image="ExpC/"
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
 
 
-    scores, eps_history, steps_array , scores_perc , numbers_actions = [], [], [], [], []
+    scores, eps_history, steps_array , scores_perc , numbers_actions, final_distances = [], [], [], [], [], []
     img_list = os.listdir(path_training_image)
 
 
@@ -131,7 +132,7 @@ if __name__ == '__main__':
         scores.append(score)
         scores_perc.append(score_perc)
         eps_history.append(agent.epsilon)
-
+        final_distances.append(final_distance)
         #avg_score = np.mean(scores[-100:])
         print('episode: ', i+1,'/',n_games,' Image:', file ,'score: %.1f' % score,
              ' percent score %.5f' % score_perc, ' number of actions ', n_actions,
@@ -145,6 +146,7 @@ if __name__ == '__main__':
     if load_checkpoint:
     	agent.save_models()
 
+
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) + '_' \
             + str(n_games) + 'games'
     figure_file = 'plots/' + fname + '.png'
@@ -155,5 +157,13 @@ if __name__ == '__main__':
     plot_learning_curve(x, scores, eps_history, figure_file1)
     plot_learning_curve(steps_array, scores, eps_history, figure_file)
 
+    with open('learning_results.csv', mode='w', newline='') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        j = 0
+        for i in range(len(scores)):
+
+            writer.writerow(
+                [i, scores[j],eps_history[j], scores_perc[j], eps_history[j], steps_array[j], final_distances[j]])
+            j = j + 1
     
 
