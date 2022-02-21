@@ -13,8 +13,6 @@ import numpy as np
 
 import os
 
-
-
 img_list = os.listdir("RawTest")
 
 diff_summs, diff_means = [] , []
