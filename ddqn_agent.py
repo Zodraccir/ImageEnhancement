@@ -124,11 +124,22 @@ class DDQNAgent(object):
         states, actions, rewards, states_, dones = self.sample_memory()
         indices = np.arange(self.batch_size)
 
-        q_pred = self.q_eval.forward(states)[indices, actions]
-        q_next = self.q_next.forward(states_).max(dim=1)[0]
+        V_s, A_s = self.q_eval.forward(states)
+        V_s_, A_s_ = self.q_next.forward(states_)
 
+        V_s_eval, A_s_eval = self.q_eval.forward(states_)
+
+        q_pred = T.add(V_s,
+                        (A_s - A_s.mean(dim=1, keepdim=True)))[indices, actions]
+
+        q_next = T.add(V_s_, (A_s_ - A_s_.mean(dim=1, keepdim=True)))
+
+        q_eval = T.add(V_s_eval, (A_s_eval - A_s_eval.mean(dim=1,keepdim=True)))
+
+        max_actions = T.argmax(q_eval, dim=1)
         q_next[dones] = 0.0
-        q_target = rewards + self.gamma * q_next
+
+        q_target = rewards + self.gamma*q_next[indices, max_actions]
 
         loss = self.q_eval.loss(q_target, q_pred).to(self.q_eval.device)
         loss.backward()

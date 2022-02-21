@@ -141,8 +141,11 @@ class DeepQNetwork(nn.Module):
             nn.Dropout(0.5),
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, n_actions),
+            nn.Linear(4096, 2048),
         )
+
+        self.A = nn.Linear(2048, n_actions)
+        self.V = nn.Linear(2048, 1)
 
         #self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
         self.optimizer = optim.Adam(self.parameters(), lr=lr)
@@ -162,8 +165,12 @@ class DeepQNetwork(nn.Module):
         #print(x.shape)
         h=x.view(x.shape[0],-1)
         #print(h.shape)
-        actions=self.classifier(h)
-        return actions
+
+        h=self.classifier(h)
+
+        actions=self.A(h)
+        V=self.V(h)
+        return V,actions
 
 
     def save_checkpoint(self):
