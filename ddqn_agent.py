@@ -85,7 +85,7 @@ class DDQNAgent(object):
         #print("torch", T.mean(state))
 
         
-        actions = self.q_eval.forward(state)
+        _,actions = self.q_eval.forward(state)
         #print(actions)
 
         # if(len(T.nonzero(T.max(actions,T.tensor([0.])))) < 1):
