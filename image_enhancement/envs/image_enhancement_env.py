@@ -56,10 +56,14 @@ class ImageEnhancementEnv(gym.Env):
 
 	# print(self.type_distance,type_distance)
 
-	def doStepOriginal(self, actions):
+
+	def doStepOriginal(self, actions,plot=False):
 		temp = self.startImageRaw.detach().clone()
 		for a in actions:
 			temp = select_fine(temp, a)
+			if(plot==True):
+				print(a)
+				self.render(temp)
 		self.finalImage = temp.detach().clone()
 
 		self.final_distance_RAW=euclideanDistance(self.finalImage,self.targetRaw)
@@ -147,6 +151,10 @@ class ImageEnhancementEnv(gym.Env):
 
 	def render(self):
 		plt.imshow(self.state.permute(1,2,0))
+		plt.show()
+
+	def render(self,state):
+		plt.imshow(state.permute(1, 2, 0))
 		plt.show()
 
 	def multiRender(self):
