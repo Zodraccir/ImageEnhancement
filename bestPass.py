@@ -146,11 +146,11 @@ if __name__ == '__main__':
             # print("finito")
 
         nums_steps.append(n_step)
-        '''
+
         if (final_distance > initial_distance):
             img_snitched = img_snitched + 1
             continue
-        '''
+
         scores.append(score)
         steps_array.append(n_steps)
         if (n_step == 0):
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
         # print(actions_done)
 
-        env.doStepOriginal(actions_done,True)
+        env.doStepOriginal(actions_done,False)
 
         final_distance_raw = env.final_distance_RAW
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
 
         avg_score = np.mean(scores[-100:])
         # print('episode: ', i,' Image: ',file,'score: ', score ,'score_per',score_perc, ' score_perc_raw', score_perc_raw , ' step' , n_step, 'initial distance raw', env.initial_distance_RAW, ' final distance raw', final_distance_raw ,'initial distance', env.initial_distance, ' final distance', final_distance ,' average score %.1f' % avg_score, 'best score %.2f' % best_score,'epsilon %.2f' % agent.epsilon, 'steps total', n_steps)
-        env.multiRender()
+        #env.multiRender()
         env.save(file)
         if avg_score > best_score:
             # if not load_checkpoint:
@@ -221,7 +221,7 @@ if __name__ == '__main__':
     print('bias', bias, 'perc ', avg_percent, 'scores ', avg_score, 'percraws ', avg_percent_raw, ' distances',
           avg_distances, ' psnr', avg_score_psnr, ' ssim', avg_score_ssim, 'num step mean', avg_step, 'max/min step',
           max_step, min_step, "img untouched", img_untouched, "max/min distance", max_distance, min_distance)
-
+    '''
     with open('results'+str(bias)+'.csv', mode='w', newline='') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
@@ -230,3 +230,4 @@ if __name__ == '__main__':
             writer.writerow(
                 [i, scores[j],nums_steps[j], scores_perc[j], scores_perc_raw[j], score_psnr[j], score_ssim[j]])
             j = j + 1
+'''
