@@ -102,8 +102,7 @@ if __name__ == '__main__':
             action = agent.choose_action(state_.unsqueeze_(0))
             #print("State_ mean: ",str(state_.mean())+ " std ",str(state_.std()) + "action done: ",action)
             observation_, reward, done, info = env.step(action)
-           
-            
+
             #print("State +1 mean: ",str(observation_.mean())+ " std ",str(observation_.std()) + "reward done: ",reward)
             score += reward
 

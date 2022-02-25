@@ -136,7 +136,7 @@ if __name__ == '__main__':
             n_step += 1
             final_distance = info
 
-            if n_step > 12:
+            if n_step > 8:
                 noposact = 1
 
             actions_done.append(action)
@@ -150,6 +150,7 @@ if __name__ == '__main__':
         if (final_distance > initial_distance):
             img_snitched = img_snitched + 1
             continue
+                
 
         scores.append(score)
         steps_array.append(n_steps)
