@@ -1,6 +1,6 @@
 import numpy as np
 import torch as T
-from deep_q_network_resnet import DeepQNetwork, bottleNeck
+from deep_q_network_vgg import DeepQNetwork
 from replay_memory import ReplayBuffer
 
 
@@ -38,7 +38,7 @@ class DDQNAgent(object):
 
         self.memory = ReplayBuffer(mem_size, input_dims, n_actions)
 
-        '''
+
         self.q_eval = DeepQNetwork(self.lr, self.n_actions,
                                     input_dims=self.input_dims,
                                     name=self.env_name+'_'+self.algo+'_q_eval',
@@ -47,8 +47,8 @@ class DDQNAgent(object):
                                     input_dims=self.input_dims,
                                     name=self.env_name+'_'+self.algo+'_q_next',
                                     chkpt_dir=self.chkpt_dir)
-        '''
 
+        '''
         #model = DeepQNetwork(0.01, 28, "", input.squeeze(0).shape, "", bottleNeck, [3, 4, 6, 3])
         self.q_eval = DeepQNetwork(self.lr, self.n_actions,name=self.env_name + '_' + self.algo + '_q_eval',
                                    input_dims=self.input_dims,
@@ -57,7 +57,7 @@ class DDQNAgent(object):
                                    input_dims=self.input_dims,
                                    name=self.env_name + '_' + self.algo + '_q_next',
                                    chkpt_dir=self.chkpt_dir,block=bottleNeck,num_layer=[3, 4, 6, 3])
-
+        '''
 
     def store_transition(self, state, action, reward, state_, done):
         self.memory.store_transition(state, action, reward, state_, done)

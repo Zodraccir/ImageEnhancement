@@ -4,6 +4,8 @@ import os
 import torch.nn.functional as F
 import torch.nn as nn
 import torch.optim as optim
+from torchsummary import summary
+
 
 class baseBlock(nn.Module):
     expansion=1
@@ -161,6 +163,7 @@ if __name__ =='__main__':
 
   model = DeepQNetwork(0.01,28,"",input.squeeze(0).shape,"",bottleNeck,[3,4,6,3])
 
+  print(summary(model, (input.squeeze(0).shape)))
 
   input = T.randn(1,3,64,64)
 

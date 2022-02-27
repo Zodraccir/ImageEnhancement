@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
+from torchsummary import summary
+
 
 class DeepQNetwork(nn.Module):
 
@@ -177,3 +179,21 @@ class DeepQNetwork(nn.Module):
                 self.eval()
         else:
         	print("file not exists")
+
+
+'''
+if __name__ =='__main__':
+  # model = torchvision.models.AlexNet()
+
+  input = T.randn(1, 3, 224, 224)
+
+
+  model = DeepQNetwork(0.01,28,"",input.squeeze(0).shape,"")
+
+  print(summary(model, (input.squeeze(0).shape)))
+
+  input = T.randn(1,3,64,64)
+
+  out = model(input)
+
+'''
