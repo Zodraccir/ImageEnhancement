@@ -119,22 +119,31 @@ class DeepQNetwork(nn.Module):
         self.checkpoint_file = os.path.join(self.checkpoint_dir, name)
 
         self.features=nn.Sequential(
-            nn.Conv2d(input_dims[0], 32, 4, 2, 1),  # in_channels, out_channels, kernel_size, stride, padding
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 64, 4, 2, 1),  # in_channels, out_channels, kernel_size, stride, padding
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(64, 256, 4, 2, 1),  # in_channels, out_channels, kernel_size, stride, padding
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(256, 256, 4, 2, 1),  # in_channels, out_channels, kernel_size, stride, padding
-            nn.LeakyReLU(0.2),
-
+            nn.Conv2d(input_dims[0], 64, 3, 2, 1),  # in_channels, out_channels, kernel_size, stride, padding
+            nn.MaxPool2d(2),  # kernel_size
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 192, 3, padding=1),
+            nn.MaxPool2d(2),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(192, 384, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(384, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.MaxPool2d(2),
+            nn.ReLU(inplace=True)
         )
 
         fc_input_dims = self.calculate_conv_output_dims(input_dims)
 
         self.classifier = nn.Sequential(
             nn.Dropout(0.5),
-            nn.Linear(fc_input_dims, n_actions),
+            nn.Linear(fc_input_dims, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Linear(4096, n_actions),
         )
 
         #self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
