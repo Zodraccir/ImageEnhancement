@@ -24,6 +24,8 @@ if __name__ == '__main__':
     parser.add_argument('--epsdecay', '-e', help="epslon decay", type=float, default=2e-5)
     parser.add_argument('--learningRate','-lr', help="learningRate",type=float,default=0.001)
     parser.add_argument('--batchSize','-b', help="batch size",type=int,default=64)
+    parser.add_argument('--gamma', '-g', help="gamma", type=float, default=0.8)
+
 
     #print(parser.format_help())
     # usage: test_args_4.py [-h] [--foo FOO] [--bar BAR]
@@ -45,10 +47,11 @@ if __name__ == '__main__':
     load_checkpoint = True
     learn_= True
     n_games = args.ngames
+    gamma=args.gamma
 
 
     #lr=0002 RMSprop
-    agent = DDQNAgent(gamma=0.80, epsilon=1.0, lr=args.learningRate,
+    agent = DDQNAgent(gamma=gamma, epsilon=1.0, lr=args.learningRate,
                      input_dims=(env.observation_space.shape),
                      n_actions=env.action_space.n, mem_size=100000, eps_min=0.05,
                      batch_size=args.batchSize, replace=1000, eps_dec=args.epsdecay,
@@ -60,7 +63,7 @@ if __name__ == '__main__':
 
     n_steps = 0
     
-    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
+    print('start execution, device used: ', agent.q_eval.device,' ,number games to execute: ',n_games, 'gamma', gamma, ' ,number action ',agent.n_actions,'learning rate: ',args.learningRate,' epslon decay: ',args.epsdecay , ' batch Size',args.batchSize)
 
 
     scores, eps_history, steps_array , scores_perc , numbers_actions, final_distances = [], [], [], [], [], []
