@@ -131,10 +131,12 @@ class DeepQNetwork(nn.Module):
         )
 
         fc_input_dims = self.calculate_conv_output_dims(input_dims)
-
+        #print(fc_input_dims)
         self.classifier = nn.Sequential(
             nn.Dropout(0.5),
-            nn.Linear(fc_input_dims, n_actions),
+            nn.Linear(fc_input_dims, 1024),
+            nn.LeakyReLU(0.2),
+            nn.Linear(1024, n_actions),
         )
 
         #self.optimizer = optim.RMSprop(self.parameters(), lr=lr)
