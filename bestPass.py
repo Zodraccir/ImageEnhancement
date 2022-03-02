@@ -53,7 +53,7 @@ if __name__ == '__main__':
     fname = agent.algo + '_' + agent.env_name + '_lr' + str(agent.lr) + '_' \
             + str(n_games) + 'games'
     figure_file = 'plots/' + fname + '.png'
-    bias = -0.05
+    bias = -0.025
 
     n_steps = 0
 
