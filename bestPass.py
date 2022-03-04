@@ -212,10 +212,10 @@ if __name__ == '__main__':
     for idx, val in enumerate(stats_actions):
         print(idx, val)
 
-    print('argmax score', img_list[np.array(scores).argmax()])
-    print('argmax scoreeperc', img_list[np.array(scores_perc_raw).argmax()])
-    print('argmax psnr', img_list[np.array(score_psnr).argmax()])
-    print('argmax ssim', img_list[np.array(score_ssim).argmax()])
+    print('argmax score', img_list[np.array(scores).argmax()],np.array(scores).max())
+    print('argmax scoreeperc', img_list[np.array(scores_perc_raw).argmax()],np.array(scores_perc_raw).max())
+    print('argmax psnr', img_list[np.array(score_psnr).argmax()], np.array(score_psnr).max())
+    print('argmax ssim', img_list[np.array(score_ssim).argmax()],np.array(score_ssim).max())
     print(len(scores))
     print('fake_stop', fake_stop)
     print('img snitched', img_snitched)
