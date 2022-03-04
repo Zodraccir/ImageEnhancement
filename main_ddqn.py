@@ -5,7 +5,7 @@ import image_enhancement
 import gym
 import numpy as np
 
-from ddqn_agent import DDQNAgent
+from ddqn_agent_resnet import DDQNAgent
 from utils import plot_learning_curve
 
 from torchvision import transforms

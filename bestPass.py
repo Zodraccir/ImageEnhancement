@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 
-from ddqn_agent import DDQNAgent
+from ddqn_agent_resnet import DDQNAgent
 from utils import plot_learning_curve
 import csv
 
